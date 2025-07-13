@@ -1,0 +1,231 @@
+.pattern-playground {
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.playground-title {
+  color: #0A192F;
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.pattern-selector {
+  margin-bottom: 1.5rem;
+}
+
+.pattern-selector label {
+  display: block;
+  font-weight: 600;
+  color: #4B5563;
+  margin-bottom: 0.5rem;
+}
+
+.pattern-selector select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: white;
+  color: #0A192F;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.pattern-selector select:hover {
+  border-color: #64FFDA;
+}
+
+.pattern-selector select:focus {
+  outline: none;
+  border-color: #0A192F;
+  box-shadow: 0 0 0 3px rgba(10, 25, 47, 0.1);
+}
+
+.pattern-info {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.pattern-info h4 {
+  color: #0A192F;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.pattern-description {
+  color: #4B5563;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.pattern-use-case {
+  color: #6B7280;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.pattern-use-case strong {
+  color: #4B5563;
+}
+
+.pattern-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.demo-button,
+.implementation-button {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.demo-button {
+  background-color: #0A192F;
+  color: white;
+}
+
+.demo-button:hover {
+  background-color: #122849;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(10, 25, 47, 0.3);
+}
+
+.implementation-button {
+  background-color: #64FFDA;
+  color: #0A192F;
+}
+
+.implementation-button:hover {
+  background-color: #4fd1c7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(100, 255, 218, 0.3);
+}
+
+.implementation-code {
+  background-color: #1e293b;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+}
+
+.implementation-code h5 {
+  color: #64FFDA;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+}
+
+.implementation-code pre {
+  margin: 0;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.implementation-code code {
+  color: #e2e8f0;
+  font-family: 'Fira Code', 'Source Code Pro', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  display: block;
+  white-space: pre;
+}
+
+.demo-output {
+  background-color: #0f172a;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.demo-output h5 {
+  color: #64FFDA;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+}
+
+.output-console {
+  font-family: 'Fira Code', 'Source Code Pro', monospace;
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+.comment-line {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.code-line {
+  color: #e2e8f0;
+}
+
+.code-line:not(:last-child) {
+  margin-bottom: 0.25rem;
+}
+
+.pattern-benefits {
+  background-color: #f0fdf4;
+  border-left: 4px solid #10b981;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.pattern-benefits h5 {
+  color: #065f46;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+}
+
+.pattern-benefits ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.pattern-benefits li {
+  color: #047857;
+  margin-bottom: 0.5rem;
+}
+
+.pattern-benefits li:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .pattern-playground {
+    padding: 1.5rem;
+  }
+  
+  .pattern-actions {
+    flex-direction: column;
+  }
+  
+  .implementation-code,
+  .demo-output {
+    padding: 1rem;
+  }
+  
+  .implementation-code code,
+  .output-console {
+    font-size: 0.75rem;
+  }
+}

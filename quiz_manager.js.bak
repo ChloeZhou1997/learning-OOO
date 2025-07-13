@@ -1,0 +1,96 @@
+export function renderQuiz(container, quizData) {
+    if (!container || !quizData) return;
+
+    let quizHTML = `<h3 class="text-2xl font-inter text-primary mb-6">${quizData.title}</h3>`;
+    quizHTML += '<form class="quiz-form">';
+
+    quizData.questions.forEach((q, index) => {
+        quizHTML += `<div class="quiz-question" id="q-${container.id}-${index}">`;
+        quizHTML += `<p>${index + 1}. ${q.question}</p>`;
+
+        if (q.type === 'mcq') {
+            quizHTML += '<ul class="quiz-options">';
+            q.options.forEach((option, i) => {
+                quizHTML += `
+                    <li>
+                        <input type="radio" id="q${index}_option${i}" name="q${index}" value="${i}">
+                        <label for="q${index}_option${i}">${option}</label>
+                    </li>`;
+            });
+            quizHTML += '</ul>';
+        } else if (q.type === 'fill-in') {
+            quizHTML += `<input type="text" class="fill-in-blank" name="q${index}" placeholder="Your answer...">`;
+        } else if (q.type === 'deeper-thinking') {
+            quizHTML += `<textarea class="deeper-thinking" name="q${index}" placeholder="Your thoughts..."></textarea>`;
+        } else if (q.type === 'coding-challenge') {
+            quizHTML += `<textarea class="deeper-thinking" name="q${index}" placeholder="Your code...">${q.starterCode}</textarea>`;
+        }
+        quizHTML += `<div class="feedback mt-2"></div>`;
+        quizHTML += `</div>`;
+    });
+
+    quizHTML += '<button type="submit" class="quiz-submit-btn">Check Answers</button>';
+    quizHTML += '</form>';
+    quizHTML += '<div id="quiz-results" class="hidden"></div>';
+    
+    container.innerHTML = quizHTML;
+
+    const form = container.querySelector('.quiz-form');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        checkAnswers(form, quizData.questions, container);
+    });
+}
+
+function checkAnswers(form, questions, container) {
+    let score = 0;
+    const total = questions.filter(q => q.type !== 'deeper-thinking' && q.type !== 'coding-challenge').length;
+
+    questions.forEach((q, index) => {
+        const feedbackEl = form.querySelector(`#q-${container.id}-${index} .feedback`);
+        feedbackEl.innerHTML = '';
+        
+        const inputName = `q${index}`;
+
+        if (q.type === 'mcq') {
+            const selectedRadio = form.querySelector(`input[name="${inputName}"]:checked`);
+            if (selectedRadio) {
+                const selectedIndex = parseInt(selectedRadio.value, 10);
+                if (selectedIndex === q.answerIndex) {
+                    score++;
+                    feedbackEl.innerHTML = `<span class="feedback-correct">Correct!</span>`;
+                } else {
+                    feedbackEl.innerHTML = `<span class="feedback-incorrect">Incorrect. The correct answer is: <strong>${q.options[q.answerIndex]}</strong></span>`;
+                }
+            } else {
+                 feedbackEl.innerHTML = `<span class="feedback-incorrect">Please select an answer.</span>`;
+            }
+        } else if (q.type === 'fill-in') {
+            const input = form.elements[inputName];
+            if (input.value.trim().toLowerCase() === q.answer.toLowerCase()) {
+                score++;
+                feedbackEl.innerHTML = `<span class="feedback-correct">Correct!</span>`;
+            } else {
+                feedbackEl.innerHTML = `<span class="feedback-incorrect">Incorrect. The correct answer is: <strong>${q.answer}</strong></span>`;
+            }
+        } else if (q.type === 'deeper-thinking' || q.type === 'coding-challenge') {
+             feedbackEl.innerHTML = `<div class="model-answer"><strong>Model Answer:</strong> ${q.modelAnswer}</div>`;
+        }
+    });
+
+    const resultsEl = container.querySelector('#quiz-results');
+    resultsEl.classList.remove('hidden');
+    const scorePercentage = total > 0 ? (score / total) * 100 : 100;
+    
+    let resultsHTML = `<h3>Quiz Complete!</h3><p>You scored ${score} out of ${total} (${scorePercentage.toFixed(0)}%).</p>`;
+    if (container.id === 'prereq-quiz-container' && scorePercentage < 70) {
+        resultsHTML += `<p class="mt-4 font-bold text-red-700">It looks like you might benefit from reviewing some programming fundamentals before proceeding. Consider brushing up on variables, loops, and functions.</p>`;
+    }
+
+    resultsEl.innerHTML = resultsHTML;
+
+    const baseClasses = 'p-4 mt-6 rounded';
+    resultsEl.className = scorePercentage >= 70 
+        ? `${baseClasses} bg-green-100 border-l-4 border-green-500 text-green-700`
+        : `${baseClasses} bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700`;
+}

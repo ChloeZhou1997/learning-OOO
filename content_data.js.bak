@@ -1,0 +1,479 @@
+export const prerequisiteQuiz = {
+    title: 'Prerequisite Knowledge Check',
+    questions: [
+        {
+            type: 'mcq',
+            question: 'What is the primary purpose of a `for` loop?',
+            options: [
+                'To declare a variable.',
+                'To execute a block of code a specific number of times.',
+                'To define a reusable function.',
+                'To handle errors in the program.'
+            ],
+            answerIndex: 1
+        },
+        {
+            type: 'mcq',
+            question: 'A function in programming is best described as:',
+            options: [
+                'A variable that holds multiple values.',
+                'A conditional statement that directs program flow.',
+                'A named, reusable block of code that performs a specific task.',
+                'The entry point of every application.'
+            ],
+            answerIndex: 2
+        },
+        {
+            type: 'mcq',
+            question: 'Which of the following correctly declares a variable named `userName` and assigns it a string value in JavaScript?',
+            options: [
+                'string userName = "Alice";',
+                'userName: "Alice";',
+                'let userName = "Alice";',
+                'let "Alice" = userName;'
+            ],
+            answerIndex: 2
+        }
+    ]
+};
+
+export const courseContent = [
+    {
+        id: 'introduction',
+        navTitle: 'Introduction',
+        title: 'Introduction: The Goal of This Book',
+        content: `
+            <p>The ultimate goal of this book is to instill a fundamental and instinctual <strong>object-oriented way of thinking</strong>. Upon completion, you will be able to not just use an object-oriented language, but to truly understand and leverage the paradigm's power.</p>
+            <p>We will focus on mastering these key skills:</p>
+            <ul>
+                <li><strong>Conceptual Fluency:</strong> Articulate and differentiate the core principles of <span class="tooltip" data-tooltip="Bundling data and methods into a single unit.">encapsulation</span>, <span class="tooltip" data-tooltip="Creating new classes from existing ones.">inheritance</span>, <span class="tooltip" data-tooltip="One interface, multiple implementations.">polymorphism</span>, and <span class="tooltip" data-tooltip="Building complex objects from simpler ones.">composition</span>.</li>
+                <li><strong>Paradigm Shift:</strong> Transition from a procedural programming mindset to an object-oriented thought process, focusing on modeling systems as collections of interacting objects.</li>
+                <li><strong>Design Acumen:</strong> Learn to identify classes, define their responsibilities, and map their collaborations based on system requirements.</li>
+                <li><strong>Maintainability Focus:</strong> Design software that is robust, extensible, and maintainable by managing dependencies and creating clear public interfaces.</li>
+            </ul>
+            <p>The desired end state is a developer who can analyze any problem domain, conceptualize it as a system of interacting objects, and design a solution that is elegant, resilient, and logical.</p>
+        `,
+        interactive: null,
+        quiz: null
+    },
+    {
+        id: 'chapter-1',
+        navTitle: '1. Intro to OO Concepts',
+        title: 'Chapter 1: Introduction to Object-Oriented Concepts',
+        content: `
+            <p>This chapter establishes the four pillars of object-orientation. These are the foundational concepts upon which all object-oriented design and programming are built.</p>
+            <ol>
+                <li><strong><span class="tooltip" data-tooltip="Bundling data (attributes) and the methods that operate on that data into a single unit, or object.">Encapsulation</span>:</strong> This is the mechanism of hiding the internal state of an object and requiring all interaction to be performed through an object's methods. Think of it as a protective shield that prevents data from being randomly accessed or modified.</li>
+                <li><strong><span class="tooltip" data-tooltip="The mechanism by which one class can inherit the properties and methods of another class. This fosters code reuse.">Inheritance</span>:</strong> This allows a new class (subclass) to be based on an existing class (superclass), inheriting its attributes and behaviors. This represents an <em>is-a</em> relationship (e.g., a <code>Car</code> is a <code>Vehicle</code>).</li>
+                <li><strong><span class="tooltip" data-tooltip="From Greek, meaning 'many forms'. It's the ability for different objects to respond to the same message or method call in their own unique way.">Polymorphism</span>:</strong> This allows you to treat objects of different classes that share a common superclass or interface as if they were objects of the common type. A single command can have different effects depending on the object it's sent to.</li>
+                <li><strong><span class="tooltip" data-tooltip="The process of building a class not by inheriting from another, but by being 'composed' of other objects.">Composition</span>:</strong> This involves creating complex objects by combining simpler ones. This represents a <em>has-a</em> relationship (e.g., a <code>Car</code> has an <code>Engine</code>).</li>
+            </ol>
+        `,
+        interactive: {
+            title: 'The Object Shield (Encapsulation)',
+            description: 'A visual demonstration of how a public interface protects private data from outside interference.'
+        },
+        quiz: {
+            title: 'Chapter 1 Quiz',
+            questions: [
+                { type: 'mcq', question: 'Which pillar of OOP is primarily concerned with bundling data and the methods that operate on that data into a single unit?', options: ['Inheritance', 'Polymorphism', 'Encapsulation', 'Composition'], answerIndex: 2 },
+                { type: 'mcq', question: 'A `Bulldog` class is created from a `Dog` class. This is an example of...', options: ['Composition', 'Inheritance', 'Encapsulation', 'Polymorphism'], answerIndex: 1 },
+                { type: 'mcq', question: 'If a `Car` object contains an `Engine` object, what is the relationship between them?', options: ['Car is-an Engine (Inheritance)', 'Car has-an Engine (Composition)', 'Polymorphism', 'Encapsulation'], answerIndex: 1 },
+                { type: 'fill-in', question: 'The ability for different objects, like a `Dog` and a `Cat`, to respond to the same `makeSound()` message differently is called ________.', answer: 'Polymorphism' },
+                { type: 'fill-in', question: "Hiding an object's complex internal state and exposing only what is necessary is a key goal of ________.", answer: 'Encapsulation' },
+                { type: 'deeper-thinking', question: 'Explain in 2-3 sentences why a developer might choose composition (`has-a`) over inheritance (`is-a`) when designing a new class.', modelAnswer: 'A developer might choose composition for flexibility. Composition allows you to change associations at runtime and helps create more loosely coupled systems. Inheritance creates a tight coupling between the superclass and subclass, making the system more rigid and harder to change without affecting related classes.' }
+            ]
+        }
+    },
+    {
+        id: 'chapter-2',
+        navTitle: '2. Thinking in Objects',
+        title: 'Chapter 2: How to Think in Terms of Objects',
+        content: `
+            <p>This chapter focuses on the crucial mental shift required for OO development. It's about moving away from top-down, procedural thinking (\\\"what does the system do?\\\") and learning to see a problem domain as a collection of interacting objects (\\\"what are the things in this system?\\\").</p>
+            <p>The core practice is <span class="tooltip" data-tooltip="The process of mapping concepts and entities from the problem you're solving to software objects.">real-world modeling</span>. When analyzing a problem description, a good starting point is to identify the nouns. These often correspond to potential classes. For example, in a library system, nouns like 'Book', 'Member', and 'Loan' are excellent candidates for classes.</p>
+            <p>This contrasts with procedural programming, which focuses on a step-by-step sequence of actions or procedures. The object-oriented approach is not process-driven but model-driven, resulting in a system that more closely mirrors the real world it represents.</p>
+        `,
+        interactive: {
+            title: 'The Refactoring Slider',
+            description: 'An interactive code view that transforms a procedural script into an object-oriented one, highlighting the shift in structure.'
+        },
+        quiz: {
+            title: 'Chapter 2 Quiz',
+            questions: [
+                { type: 'mcq', question: 'When analyzing a problem description, which parts of speech often correspond to potential classes?', options: ['Verbs', 'Nouns', 'Adjectives', 'Adverbs'], answerIndex: 1 },
+                { type: 'mcq', question: 'Procedural programming focuses primarily on...', options: ['Modeling real-world entities', 'A step-by-step sequence of actions', 'Data encapsulation', 'Message passing between objects'], answerIndex: 1 },
+                { type: 'mcq', question: 'The main goal of the object-oriented thought process is to model a system as...', options: ['A single, monolithic script', 'A collection of interacting objects', 'A series of functions and subroutines', 'A database schema'], answerIndex: 1 },
+                { type: 'deeper-thinking', question: 'Consider a simple ATM system. Identify three potential objects (classes) and list one primary responsibility for each.', modelAnswer: '1. Customer: Responsible for holding user data (name, PIN). 2. BankAccount: Responsible for managing the balance (deposits, withdrawals). 3. ATM: Responsible for orchestrating the transaction and interacting with the user.' }
+            ]
+        }
+    },
+    {
+        id: 'chapter-3',
+        navTitle: '3. Advanced OO Concepts',
+        title: 'Chapter 3: Advanced Object-Oriented Concepts',
+        content: `
+            <p>This chapter builds on the fundamentals with more sophisticated concepts related to the object lifecycle.</p>
+            <ul>
+                <li><strong><span class="tooltip" data-tooltip="A special method automatically called when an object is created. Its job is to initialize the object into a valid state.">Constructors</span>:</strong> When you create a new object, a constructor is called. It's a special method designed to set up the object's initial state, allocate necessary resources, and ensure it's ready to be used. A well-designed constructor prevents objects from starting in a broken or invalid state.</li>
+                <li><strong><span class="tooltip" data-tooltip="The automatic process of reclaiming memory occupied by objects that are no longer in use by the program.">Garbage Collection</span>:</strong> In many modern languages like Java and C#, developers don't need to manually de-allocate memory. The runtime environment periodically identifies and frees up memory from objects that are no longer reachable, which helps prevent memory leaks.</li>
+                <li><strong>Error Handling:</strong> A robust class should anticipate and handle potential errors gracefully. This could involve using try-catch blocks or designing methods that return special values to indicate failure, rather than letting the application crash.</li>
+            </ul>
+        `,
+        interactive: {
+            title: 'Object Assembly Line',
+            description: 'An animation showing the sequence of memory allocation, constructor invocation, and variable initialization when a new object is created.'
+        },
+        quiz: {
+            title: 'Chapter 3 Quiz',
+            questions: [
+                { type: 'mcq', question: 'What is the primary role of a constructor?', options: ['To destroy an object', 'To create and initialize an object', 'To copy an object', 'To compare two objects'], answerIndex: 1 },
+                { type: 'fill-in', question: 'The process by which unused objects are automatically removed from memory in languages like Java is called garbage ________.', answer: 'collection' },
+                { type: 'deeper-thinking', question: 'Why is it important for a constructor to ensure an object is created in a valid state?', modelAnswer: 'It is important because it prevents other parts of the program from interacting with a partially-formed or broken object. This enhances system stability and predictability, as objects are always in a usable and consistent state from the moment they are created.' }
+            ]
+        }
+    },
+    {
+        id: 'chapter-4',
+        navTitle: '4. Anatomy of a Class',
+        title: 'Chapter 4: The Anatomy of a Class',
+        content: `
+            <p>A class is the blueprint from which individual objects are created. This chapter examines the internal structure of that blueprint.</p>
+            <ul>
+                <li><strong>Attributes (Fields):</strong> These are variables within a class that hold the state of an object. For example, a <code>Person</code> class might have attributes like <code>name</code> and <code>age</code>.</li>
+                <li><strong>Methods:</strong> These are functions defined within a class that define its behavior. The <code>Person</code> class might have a method called <code>introduce()</code>.</li>
+                <li><strong><span class="tooltip" data-tooltip="Keywords like 'public', 'private', and 'protected' that control whether attributes and methods can be accessed from outside the class.">Access Modifiers</span>:</strong> These are crucial for encapsulation. By marking attributes as <code>private</code>, you force other parts of your code to use <code>public</code> methods (getters and setters) to interact with the object's state, preventing direct, uncontrolled modification.</li>
+                <li><strong>Class vs. Instance Members:</strong> An <em>instance</em> member (attribute or method) belongs to each individual object created from the class. A <em>class</em> member (often marked with the <code>static</code> keyword) is shared by all objects of that class. For example, a <code>Car</code> class might have a static counter to track how many cars have been manufactured in total.</li>
+            </ul>
+            <pre><code class="language-java">// Example of a simple class in Java\\npublic class Person {\\n\\n    private String name; \\n\\n\n    public Person(String name) {\\n        this.name = name;\\n    }\\n\n\n    public void introduce() {\\n        System.out.println(\\\"Hello, my name is \\\" + this.name);\\n    }\\n}</code></pre>
+        `,
+        interactive: {
+            title: 'The Code Gatekeeper',
+            description: 'A mini-simulator where you try to access private members of a class and see immediate access errors, reinforcing the concept of access modifiers.'
+        },
+        quiz: {
+            title: 'Chapter 4 Quiz',
+            questions: [
+                { type: 'mcq', question: 'Which keyword is typically used to restrict access to a class member so it can only be accessed by methods within the same class?', options: ['public', 'global', 'private', 'static'], answerIndex: 2 },
+                { type: 'mcq', question: 'A member declared with the `static` keyword belongs to the ________.', options: ['individual object instance', 'class itself', 'constructor', 'superclass'], answerIndex: 1 },
+                { type: 'fill-in', question: 'Keywords like `public` and `private` that control visibility are known as ________ modifiers.', answer: 'access' },
+                { type: 'deeper-thinking', question: 'Why is it generally considered bad practice to make class attributes public?', modelAnswer: "Making attributes public breaks encapsulation. It allows external code to directly modify an object's state, potentially putting it into an invalid or inconsistent state. This makes the code harder to maintain and debug, as changes to an attribute's value can come from anywhere in the program." }
+            ]
+        }
+    },
+    {
+        id: 'chapter-5',
+        navTitle: '5. Class Design Guidelines',
+        title: 'Chapter 5: Class Design Guidelines',
+        content: `
+            <p>This chapter presents a set of principles for designing high-quality, reusable, and maintainable classes. The focus is on creating a clear separation between what a class does (its interface) and how it does it (its implementation).</p>
+            <ul>
+                <li><strong>Minimal Public Interface:</strong> A class should only expose the methods necessary for other parts of the system to interact with it. A small, well-defined interface is easier to understand and maintain.</li>
+                <li><strong>Implementation Hiding:</strong> This is a core tenet of encapsulation. The internal details of how a class works should be kept private. This allows you to change the implementation later (e.g., to fix a bug or improve performance) without breaking the code that uses your class.</li>
+                <li><strong><span class="tooltip" data-tooltip="The degree of interdependence between classes. The goal is to have 'low coupling'.">Coupling</span>:</strong> This refers to how much classes know about each other. In a well-designed system, classes are loosely coupled. They interact through their public interfaces without needing to know about each other's internal workings. High coupling makes a system brittle and hard to change.</li>
+                <li><strong>Designing for Maintainability:</strong> Good class design leads to code that is easy to understand, modify, and extend in the future. This is achieved by following principles like keeping classes focused on a single responsibility.</li>
+            </ul>
+        `,
+        interactive: {
+            title: 'The System Web',
+            description: 'A diagram of interconnected classes. Highly coupled classes have thick, rigid "cables" connecting them, making them hard to move independently. Loosely coupled classes have thin, elastic "threads".'
+        },
+        quiz: {
+            title: 'Chapter 5 Quiz',
+            questions: [
+                { type: 'mcq', question: 'What is the primary benefit of "implementation hiding"?', options: ['It makes the code run faster.', 'It allows internal changes without breaking client code.', 'It reduces the number of methods in a class.', 'It automatically documents the code.'], answerIndex: 1 },
+                { type: 'mcq', question: 'A well-designed system should aim for ________.', options: ['high coupling', 'tight coupling', 'low coupling', 'no coupling'], answerIndex: 2 },
+                { type: 'fill-in', question: 'Exposing only the necessary methods to the outside world is the principle of a ________ public interface.', answer: 'minimal' },
+                { type: 'deeper-thinking', question: 'Why is designing a class with a minimal public interface a good practice for long-term maintainability?', modelAnswer: 'A minimal public interface reduces the "surface area" of a class. This means there are fewer ways for other parts of the system to depend on it, which makes the class easier to change and refactor later. It also makes the class simpler to understand and use correctly.' }
+            ]
+        }
+    },
+    {
+        id: 'chapter-6',
+        navTitle: '6. Designing with Objects',
+        title: 'Chapter 6: Designing with Objects',
+        content: `
+            <p>This chapter scales up from designing single classes to designing a complete system of interacting objects. It outlines a systematic process for translating user needs into a working object-oriented model, using a blackjack game as a case study.</p>
+            <ul>
+                <li><strong>Requirements Gathering:</strong> The first step is to understand and document what the system must do, often starting from a high-level description or Statement of Work (SOW).</li>
+                <li><strong><span class="tooltip" data-tooltip="Class-Responsibility-Collaboration: An early-stage design technique.">CRC Cards</span>:</strong> This is a simple, effective brainstorming technique. For each potential class, you use an index card to list its primary responsibilities and the other classes it collaborates with to fulfill those responsibilities.</li>
+                <li><strong>Prototyping:</strong> Creating mockups or simple versions of the user interface can help clarify requirements and provides a tangible reference for both developers and stakeholders.</li>
+                <li><strong>Object Modeling:</strong> The process of creating a formal or informal representation of the system's classes and their relationships, often using diagrams to visualize the structure.</li>
+            </ul>
+        `,
+        interactive: {
+            title: 'Digital CRC Session',
+            description: 'An interactive tool where you are given a requirement and must fill out digital CRC cards by typing in responsibilities and indicating collaborations.'
+        },
+        quiz: {
+            title: 'Chapter 6 Quiz',
+            questions: [
+                { type: 'mcq', question: 'What does "CRC" stand for in the context of CRC Cards?', options: ['Class-Resource-Controller', 'Component-Responsibility-Container', 'Class-Responsibility-Collaboration', 'Code-Review-Checklist'], answerIndex: 2 },
+                { type: 'fill-in', question: 'A ________ is often created to clarify requirements and guide the user interface design before full development begins.', answer: 'prototype' },
+                { type: 'deeper-thinking', question: 'Describe the three components of a CRC card and how they help in the object-oriented design process.', modelAnswer: '1. Class: The name of the object. 2. Responsibilities: What the class knows or does. 3. Collaborations: Other classes it interacts with. This process helps designers think about the system as a dynamic set of interacting objects from a high level, focusing on behavior rather than getting bogged down in implementation details too early.' }
+            ]
+        }
+    },
+    {
+        id: 'chapter-7',
+        navTitle: '7. Inheritance & Composition',
+        title: 'Chapter 7: Mastering Inheritance and Composition',
+        content: `
+            <p>This chapter delves deeply into the two primary ways of building classes from other classes: inheritance and composition. Making the right choice between them is a critical architectural decision that affects the flexibility and maintainability of your system.</p>
+            <ul>
+                <li><strong><span class="tooltip" data-tooltip="Inheritance: A 'Dog' is an 'Animal'.">is-a</span> vs. <span class="tooltip" data-tooltip="Composition: A 'Car' has an 'Engine'.">has-a</span> Relationships:</strong> This is the fundamental test. Use inheritance for 'is-a' relationships (a <code>Manager</code> is an <code>Employee</code>). Use composition for 'has-a' relationships (a <code>Car</code> has an <code>Engine</code>).</li>
+                <li><strong>Favor Composition over Inheritance:</strong> This is a common design principle. Composition is often more flexible than inheritance because you can change 'has-a' relationships at runtime, leading to more loosely coupled designs.</li>
+                <li><strong>Implementation Inheritance:</strong> Be wary of inheriting from a class just to reuse some of its code. This can lead to a fragile design where changes in the superclass unexpectedly break the subclass.</li>
+                <li><strong>Multiple Inheritance:</strong> This is the concept of a class inheriting from more than one superclass. While powerful, it can lead to complex and ambiguous situations (like the "Diamond Problem") and is not supported in many languages like Java and C#.</li>
+            </ul>
+        `,
+        interactive: {
+            title: 'The Relationship Litmus Test',
+            description: 'A guided quiz. You are presented with a scenario (e.g., "A Car and an Engine"). The tool asks questions like "Can you say a Car *is an* Engine?" to guide you to the correct relationship.'
+        },
+        quiz: {
+            title: 'Chapter 7 Quiz',
+            questions: [
+                { type: 'mcq', question: 'A `Laptop` class uses a `Battery` class. This relationship is best modeled using:', options: ['Inheritance (is-a)', 'Composition (has-a)', 'Polymorphism', 'Encapsulation'], answerIndex: 1 },
+                { type: 'mcq', question: 'The "is-a" relationship is directly implemented in code using:', options: ['An interface', 'Composition', 'Inheritance', 'A private method'], answerIndex: 2 },
+                { type: 'fill-in', question: 'A common design principle is to "favor ________ over inheritance" because it often leads to more flexible and maintainable systems.', answer: 'composition' },
+                { type: 'deeper-thinking', question: 'Explain the "fragile base class" problem, which is a common risk associated with implementation inheritance.', modelAnswer: 'The fragile base class problem occurs when a change to a superclass (the "base" class) unexpectedly breaks the functionality of its subclasses. This happens because subclasses are tightly coupled to the implementation details of their superclass. Favoring composition or using interfaces can mitigate this risk.' }
+            ]
+        }
+    },
+    {
+        id: 'chapter-8',
+        navTitle: '8. Interfaces & Abstract Classes',
+        title: 'Chapter 8: Designing with Interfaces and Abstract Classes',
+        content: `
+            <p>This chapter focuses on designing for extensibility and flexibility. It explains how to use abstract classes and interfaces to define "contracts" that other classes can implement. This is key to building frameworks and systems that can evolve over time.</p>
+            <ul>
+                <li><strong><span class="tooltip" data-tooltip="A class that cannot be instantiated and is meant to be subclassed. Can contain both implemented and abstract methods.">Abstract Class</span>:</strong> Use an abstract class when you want to provide a common base implementation for a group of subclasses. It defines a template but allows subclasses to provide specific details.</li>
+                <li><strong><span class="tooltip" data-tooltip="A contract that only defines method signatures, not implementations. A class can implement multiple interfaces.">Interface</span>:</strong> An interface is a pure contract. It defines a set of methods that a class *must* implement. This is the primary mechanism for achieving polymorphism and creating "plug-in" architectures where different components can be swapped out as long as they adhere to the interface.</li>
+                <li><strong>Designing for Extensibility:</strong> By programming to an interface rather than a concrete class, you create a system where new functionality can be added with minimal changes to existing code. For example, your system could work with an <code>IDataStorage</code> interface, allowing you to easily add <code>DatabaseStorage</code> or <code>CloudStorage</code> classes later.</li>
+            </ul>
+        `,
+        interactive: {
+            title: 'The Plugin Socket',
+            description: 'A visual of a system with a "data source" socket expecting an `IDataProvider` interface. You can drag and drop different modules (`DatabaseProvider`, `ApiProvider`), all of which fit the socket, to see the system work.'
+        },
+        quiz: {
+            title: 'Chapter 8 Quiz',
+            questions: [
+                { type: 'mcq', question: 'What is a key difference between an interface and an abstract class in most OO languages?', options: ['An interface can be instantiated, but an abstract class cannot.', 'An abstract class can contain implemented methods, while an interface generally cannot.', 'A class can inherit from multiple abstract classes.', 'Interfaces are used for "is-a" relationships, while abstract classes are for "has-a".'], answerIndex: 1 },
+                { type: 'mcq', question: "If you want to define a contract for what a class can do, but you don't want to provide any implementation, you should use a(n)...", options: ['Static Class', 'Concrete Class', 'Abstract Class', 'Interface'], answerIndex: 3 },
+                { type: 'fill-in', question: 'Using a(n) ________ allows different objects, such as `Dog` and `Cat`, to be treated as a common type, like `IAnimal`, achieving polymorphism.', answer: 'interface' },
+                { type: 'deeper-thinking', question: 'When would you choose to use an abstract class over an interface, and why?', modelAnswer: 'You would choose an abstract class when you want to provide common, shared functionality (implemented methods) to a group of related subclasses. An interface is better when you just need to define a contract for behavior that can be implemented by unrelated classes.' }
+            ]
+        }
+    },
+    {
+        id: 'chapter-9',
+        navTitle: '9. Building Objects',
+        title: 'Chapter 9: Building Objects',
+        content: `
+            <p>This chapter revisits and expands upon the object creation process first introduced in Chapter 3. It emphasizes the critical importance of ensuring an object is put into a valid and safe state the moment it is created.</p>
+            <ul>
+                <li><strong>Robust Constructors:</strong> A good constructor does more than just assign values. It should validate input parameters to ensure the new object is not created with invalid data. For example, a constructor for a <code>Student</code> class should not accept a negative age.</li>
+                <li><strong>Object Initialization:</strong> This involves setting initial values for all attributes, whether they come from constructor parameters or are set to sensible default values. The goal is to prevent an object from ever existing in a partially-formed or inconsistent state.</li>
+                <li><strong>Overloaded Constructors:</strong> A class can have multiple constructors with different parameter lists. This provides flexibility, allowing objects to be created in different ways. For example, a <code>User</code> object might be created with just a username, or with a username, password, and email address.</li>
+                <li><strong>The Object Lifecycle:</strong> This chapter reinforces the view of an object's existence: it is created and initialized by a constructor, it performs its duties during its lifetime, and it is eventually removed from memory (often by garbage collection). A robust constructor is the gatekeeper to this lifecycle.</li>
+            </ul>
+        `,
+        interactive: {
+            title: 'Robust Object Construction',
+            description: 'A step-by-step visualizer showing how a robust constructor validates input, sets default values, and allocates resources to prevent an object from ever being created in an invalid state.'
+        },
+        quiz: {
+            title: 'Chapter 9 Quiz',
+            questions: [
+                { type: 'mcq', question: 'A primary goal of a robust constructor is to:', options: ['Make the object as small as possible in memory.', 'Ensure the object is created in a valid and usable state.', 'Provide a way to destroy the object.', 'Copy data from another object.'], answerIndex: 1 },
+                { type: 'fill-in', question: 'Having multiple constructors with different sets of parameters in the same class is known as constructor ________.', answer: 'overloading' },
+                { type: 'coding-challenge',
+                  question: 'In the code box below, complete the `Circle` class constructor. It should take a `radius` as an argument. If the provided radius is negative, it should throw an error. Otherwise, it should assign the radius to the `this.radius` property.',
+                  starterCode: `class Circle {\\n    constructor(radius) {\\n        // Your code here\\n    }\\n}`,
+                  modelAnswer: `class Circle {\\n    constructor(radius) {\\n        if (radius < 0) {\\n            throw new Error('Radius cannot be negative.');\\n        }\\n        this.radius = radius;\\n    }\\n}`
+                },
+                { type: 'deeper-thinking', question: 'Why is it important for a constructor to set sensible default values for attributes that are not provided as parameters?', modelAnswer: 'Setting default values ensures that an object is never in an uninitialized or null state, which can cause runtime errors (like NullPointerExceptions). It guarantees that the object is fully formed and consistent from the moment of its creation, making the system more stable and predictable.' }
+            ]
+        }
+    },
+    {
+        id: 'chapter-10',
+        navTitle: '10. UML Object Models',
+        title: 'Chapter 10: Creating Object Models with UML',
+        content: `
+            <p>This chapter introduces the <span class="tooltip" data-tooltip="A standardized modeling language for visualizing, specifying, constructing, and documenting software systems.">Unified Modeling Language (UML)</span>. It's crucial to understand that UML is not a design process itself, but rather a standard visual language used to communicate and document an object-oriented design. It provides a shared blueprint that all stakeholders can understand.</p>
+            <p>While UML has many diagram types, we focus on a few key ones for OO design:</p>
+            <ul>
+                <li><strong>Class Diagrams:</strong> The most common diagram in OO design. It shows the system's classes, their attributes, methods, and the relationships between the classes (like inheritance, composition, and association).</li>
+                <li><strong>Use-Case Diagrams:</strong> These model the interactions between external users (called 'actors') and the system. They help define the system's functional requirements from a user's perspective.</li>
+                <li><strong>Collaboration/Sequence Diagrams:</strong> These diagrams illustrate how objects work together to accomplish a task, showing the messages passed between them over time.</li>
+            </ul>
+            <p>Mastering the basics of UML, especially class diagrams, allows you to clearly communicate your architectural vision before writing a single line of code, preventing misunderstandings and costly rework.</p>
+        `,
+        interactive: {
+            title: 'UML Blueprint Drafter',
+            description: 'A simplified drag-and-drop tool. You are given a list of entities and relationships (e.g., "A Customer can have multiple Orders") and must drag class boxes onto a canvas and connect them with the correct UML notation for association.'
+        },
+        quiz: {
+            title: 'Chapter 10 Quiz',
+            questions: [
+                { type: 'mcq', question: 'What is the primary purpose of UML?', options: ['To compile code', 'To provide a standard way to visualize and document a system design', 'To replace the need for programming', 'To manage project timelines'], answerIndex: 1 },
+                { type: 'fill-in', question: 'A ________ diagram is the most common in OO design for visualizing classes, attributes, methods, and relationships.', answer: 'class' },
+                { type: 'deeper-thinking', question: 'Why is it important to distinguish between UML as a language and design as a process?', modelAnswer: "UML is a tool for communication, like grammar in a language. It provides the rules for creating diagrams but doesn't tell you *what* to draw. The design process is the creative act of problem-solving, identifying classes, and defining responsibilities. Confusing the two can lead to focusing on perfect diagrams instead of a good underlying design." }
+            ]
+        }
+    },
+    {
+        id: 'chapter-11',
+        navTitle: '11. Objects & Portable Data',
+        title: 'Chapter 11: Objects and Portable Data: XML',
+        content: `
+            <p>Once you've built your objects, how do you share them or save them? This chapter explores using <span class="tooltip" data-tooltip="eXtensible Markup Language: A text-based format for representing structured data.">XML</span> as a way to represent object data in a portable format. XML encodes data in a way that is both human-readable and machine-readable.</p>
+            <p>The key advantages of using a format like XML are:</p>
+            <ul>
+                <li><strong>Data Portability:</strong> An object's state can be converted to an XML document and sent across a network to another application, which could be written in a completely different programming language. The receiving application just needs to know how to parse the XML.</li>
+                <li><strong>Persistence:</strong> XML files can be used to save an object's state to disk, allowing it to be reloaded later. This is a simple form of object persistence.</li>
+                <li><strong>Configuration:</strong> Many applications use XML files to store configuration settings that can be edited without recompiling the application.</li>
+            </ul>
+            <p>The process of converting an object's data to an XML structure is called object-to-XML mapping. This involves creating a corresponding XML element for the object and child elements or attributes for its properties.</p>
+        `,
+        interactive: {
+            title: 'The Data Transformer',
+            description: 'A two-panel view. On the left is a simple object instance. Clicking "Serialize to XML" populates the right panel with the corresponding XML document, with lines highlighting the mapping from object properties to XML elements.'
+        },
+        quiz: {
+            title: 'Chapter 11 Quiz',
+            questions: [
+                { type: 'mcq', question: 'What is a primary advantage of using XML for data representation?', options: ['It is the fastest data format.', 'It requires a specific programming language.', 'It is portable and can be read by both humans and machines.', 'It includes executable code.'], answerIndex: 2 },
+                { type: 'fill-in', question: 'The ability to exchange object data between applications written in different languages is known as data ________.', answer: 'portability' },
+                { type: 'deeper-thinking', question: 'What kind of challenges might you face when trying to represent a complex object, with relationships to other objects, in XML?', modelAnswer: 'Challenges include handling circular references (Object A refers to B, and B refers to A), deciding whether to embed related objects or just reference them by an ID, and maintaining data integrity. It can lead to very large and deeply nested XML files if not designed carefully.' }
+            ]
+        }
+    },
+    {
+        id: 'chapter-12',
+        navTitle: '12. Persistence',
+        title: 'Chapter 12: Persistent Objects',
+        content: `
+            <p><span class="tooltip" data-tooltip="The ability of an object's state to outlive the process that created it.">Persistence</span> is the concept of making an object's state survive after the application terminates. This is fundamental for almost any real-world application, as objects in a program normally disappear when the program stops running.</p>
+            <p>We explore two main techniques for achieving persistence:</p>
+            <ul>
+                <li><strong><span class="tooltip" data-tooltip="The process of converting an object into a stream of bytes to be stored or transmitted.">Serialization</span>:</strong> This involves converting the object into a format (like binary or JSON/XML) that can be written to a file. The object can later be "deserialized" back into its original form. It's simple but can be brittle if the class structure changes.</li>
+                <li><strong>Relational Databases:</strong> For more robust persistence, we often store object data in a relational database. This introduces a significant challenge known as the <span class="tooltip" data-tooltip="The difficulty of mapping the object-oriented paradigm to the relational paradigm.">Object-Relational Impedance Mismatch</span>. Objects are complex networks of interconnected data, while databases use simple, flat tables.</li>
+            </ul>
+            <p>Tools called <span class="tooltip" data-tooltip="Object-Relational Mappers: Libraries that automate the transfer of data between objects and relational databases.">ORMs</span> exist to help bridge this gap, but understanding the underlying problem is crucial for designing a good persistence strategy.</p>
+        `,
+        interactive: {
+            title: 'The Data Transformer',
+            description: 'A two-panel interactive view. On the left is a simple instantiated object (e.g., a `User` object with `id` and `name`). On the right is a blank panel. The user clicks a "Serialize to JSON" button, and the right panel populates with the corresponding JSON, with lines highlighting the mapping from object property to JSON key-value pair.'
+        },
+        quiz: {
+            title: 'Chapter 12 Quiz',
+            questions: [
+                { type: 'mcq', question: 'The process of converting an object into a stream of bytes for storage is called:', options: ['Compilation', 'Persistence', 'Serialization', 'Instantiation'], answerIndex: 2 },
+                { type: 'fill-in', question: 'The fundamental mismatch between the object model and the relational database model is often called the Object-Relational ________ Mismatch.', answer: 'Impedance' },
+                { type: 'deeper-thinking', question: 'Why is serialization considered a more "brittle" persistence solution compared to using a database with an ORM?', modelAnswer: 'Serialization is brittle because the saved data is tightly coupled to the exact class structure. If you change the class (e.g., rename a field), you may no longer be able to deserialize old data. A database with an ORM provides more flexibility, allowing the database schema and object model to evolve more independently.' }
+            ]
+        }
+    },
+    {
+        id: 'chapter-13',
+        navTitle: '13. Client/Server Apps',
+        title: 'Chapter 13: Developing Client/Server Applications',
+        content: `
+            <p>Object-oriented principles are central to modern web development. Web applications are built on a <span class="tooltip" data-tooltip="An architecture where a 'client' (like your web browser) requests resources from a 'server'.">client/server model</span>, where objects exist and play different roles on both sides.</p>
+            <ul>
+                <li><strong>Server-Side Objects:</strong> On the server, objects are used to handle business logic, interact with databases, and process requests. A `User` object might handle authentication, or a `Product` object might manage inventory data. This is where the core logic of the application lives.</li>
+                <li><strong>Client-Side Objects:</strong> In the browser, languages like JavaScript use objects to manage the user interface, handle user input, and communicate with the server. A client-side script might perform initial data validation on a form before sending it to the server.</li>
+                <li><strong><span class="tooltip" data-tooltip="Application Programming Interface: A contract that allows different software components to communicate.">APIs</span>:</strong> The client and server communicate through APIs. The server exposes endpoints (URLs) that the client can call to fetch data or perform actions. Often, the data is exchanged as objects serialized into JSON.</li>
+            </ul>
+            <p>A key architectural consideration is deciding where to place logic. While client-side validation provides a fast user experience, authoritative validation must *always* happen on the server to ensure data integrity and security, as client-side code can be bypassed.</p>
+        `,
+        interactive: {
+            title: 'The Network Call',
+            description: 'An animated diagram showing a browser (client) with a form object. When the user clicks "Submit", the form object is serialized to JSON and sent across a network graphic to a server icon. The server icon processes it and sends back a response object, which updates the browser view.'
+        },
+        quiz: {
+            title: 'Chapter 13 Quiz',
+            questions: [
+                { type: 'mcq', question: 'In a client/server model, which part is considered the authoritative source for business logic and data integrity?', options: ['The Client', 'The Server', 'The Network', 'The API'], answerIndex: 1 },
+                { type: 'fill-in', question: 'The common data format for exchanging objects between a modern client and server is ________.', answer: 'JSON' },
+                { type: 'deeper-thinking', question: 'Explain why validating user input on the server is critical for security, even if the same validation exists on the client.', modelAnswer: "Client-side validation is a user-experience feature; it can be easily bypassed by turning off JavaScript or sending a manual request to the server's API. Server-side validation is a security requirement. It protects the system's data and logic from invalid or malicious input that has bypassed the client-side checks." }
+            ]
+        }
+    },
+    {
+        id: 'chapter-14',
+        navTitle: '14. Design Patterns',
+        title: 'Chapter 14: Common Design Patterns',
+        content: `
+            <p>You are not the first person to face a particular design problem. <span class="tooltip" data-tooltip="A general, reusable solution to a commonly occurring problem within a given context in software design.">Design Patterns</span> are proven, reusable solutions to common challenges. They provide a shared vocabulary that helps developers communicate design ideas more effectively.</p>
+            <p>Patterns are typically grouped into three categories:</p>
+            <ul>
+                <li><strong>Creational Patterns:</strong> These provide object creation mechanisms that increase flexibility and reuse. Examples include <strong>Singleton</strong> (ensure only one instance of a class exists) and <strong>Factory</strong> (use a method to create objects without specifying the exact class).</li>
+                <li><strong>Structural Patterns:</strong> These explain how to assemble objects and classes into larger structures. Examples include <strong>Adapter</strong> (allows objects with incompatible interfaces to collaborate) and <strong>Decorator</strong> (adds new responsibilities to an object dynamically).</li>
+                <li><strong>Behavioral Patterns:</strong> These are concerned with algorithms and the assignment of responsibilities between objects. Examples include <strong>Iterator</strong> (provide a way to access elements of a collection sequentially) and <strong>Observer</strong> (allow an object to notify other objects when its state changes).</li>
+            </ul>
+            <p>Learning design patterns is a major step in maturing as a software designer. It moves you from solving problems from scratch to leveraging the collective experience of the software development community.</p>
+        `,
+        interactive: {
+            title: 'The Pattern Matcher',
+            description: 'A scenario-based quiz. A common software problem is described (e.g., "We need to ensure only one instance of our DatabaseConnection class ever exists"). The user must then select the appropriate design pattern (Singleton, Factory, Adapter, etc.) from a list.'
+        },
+        quiz: {
+            title: 'Chapter 14 Quiz',
+            questions: [
+                { type: 'mcq', question: 'Which pattern category is concerned with how objects are created?', options: ['Structural', 'Behavioral', 'Creational', 'Architectural'], answerIndex: 2 },
+                { type: 'mcq', question: "You have an old logging class that doesn't match the new `ILogger` interface your system requires. Which pattern is best suited to solve this?", options: ['Singleton', 'Adapter', 'Observer', 'Factory'], answerIndex: 1},
+                { type: 'fill-in', question: 'The ________ pattern ensures that a class has only one instance and provides a global point of access to it.', answer: 'Singleton' },
+                {
+                    type: 'coding-challenge',
+                    question: "Complete the `Logger.getInstance()` method to correctly implement the Singleton pattern. It should create a new instance only if one doesn't exist, and always return the single, shared instance.",
+                    starterCode: `class Logger {\\n    static instance;\\n\\n    constructor() {\\n        // The constructor is public for simplicity,\\n        // but the pattern relies on using getInstance().\\n        this.logs = [];\\n    }\\n\\n    static getInstance() {\\n        // Your code here. If 'instance' is not set,\\n        // create a new Logger and assign it to 'Logger.instance'.\\n        // Always return 'this.instance'.\\n    }\\n\\n    log(message) {\\n        this.logs.push(message);\\n        console.log(\\\"LOG: \\\" + message);\\n    }\\n}`,
+                    modelAnswer: `class Logger {\\n    static instance;\\n\\n    constructor() {\\n        // The constructor is public for simplicity,\\n        // but the pattern relies on using getInstance().\\n        this.logs = [];\\n    }\\n\\n    static getInstance() {\\n        if (!Logger.instance) {\\n            Logger.instance = new Logger();\\n        }\\n        return Logger.instance;\\n    }\\n\\n    log(message) {\\n        this.logs.push(message);\\n        console.log(\\\"LOG: \\\" + message);\\n    }\\n}`
+                }
+            ]
+        }
+    },
+    {
+        id: 'chapter-15',
+        navTitle: '15. The End Game',
+        title: 'Chapter 15: The End Game: Your Journey to Mastery',
+        content: `
+            <p>This book's ultimate goal was to instill a fundamental and instinctual <strong>object-oriented way of thinking</strong>. By reaching this point, you have moved beyond simply knowing the syntax of an OO language to truly understanding the paradigm's power. This is the difference between a coder and a software designer.</p>
+            <p>Let's recap the core skills you've developed:</p>
+            <ul>
+                <li><strong>Conceptual Fluency:</strong> You can now articulate and differentiate between encapsulation, inheritance, polymorphism, and composition.</li>
+                <li><strong>The Paradigm Shift:</strong> You have practiced moving from a procedural mindset to one focused on modeling systems as collections of interacting objects.</li>
+                <li><strong>Design Acumen:</strong> You have learned to identify classes, define their responsibilities, and map their collaborations from system requirements.</li>
+                <li><strong>Maintainability Focus:</strong> You understand how to design software that is robust, extensible, and maintainable by managing coupling and creating clear public interfaces.</li>
+            </ul>
+            <p>The journey doesn't end here. True mastery comes from practice. Continue to analyze problems through an object-oriented lens. When you look at a system, don't just see what it does; see the objects within it, their state, their behavior, and how they collaborate. This way of thinking will enable you to design solutions that are elegant, resilient, and logical.</p>
+        `,
+        interactive: {
+            title: 'Your Final Blueprint',
+            description: 'A reflective exercise. You are presented with a new project requirement: "Design a simple system to manage a personal library of books." You are given a text area to outline the primary classes you would create (e.g., Book, Library, Member) and list their main responsibilities.'
+        },
+        quiz: {
+            title: 'Chapter 15 Quiz',
+            questions: [
+                { type: 'mcq', question: 'The ultimate goal of the object-oriented thought process is to:', options: ['Write code with fewer lines.', 'Master a specific programming language like Java.', 'Instinctively model problems as systems of interacting objects.', 'Eliminate all programming bugs.'], answerIndex: 2 },
+                { type: 'fill-in', question: 'Managing the interdependence between classes, aiming for low ________, is key to creating maintainable software.', answer: 'coupling' },
+                { type: 'deeper-thinking', question: 'In your own words, what is the single most important difference between procedural programming and object-oriented programming?', modelAnswer: 'Procedural programming focuses on a sequence of actions or procedures to perform a task. Object-oriented programming focuses on creating a model of the problem domain itself, consisting of objects that have both data and behavior. The OO approach leads to systems that are often more modular, flexible, and easier to map to real-world concepts.' }
+            ]
+        }
+    },
+    {
+        id: 'conclusion',
+        navTitle: 'Conclusion',
+        title: 'Conclusion: The Object-Oriented Mindset',
+        content: `
+            <p>Congratulations on completing this journey. The principles you've learned are more than just programming techniques; they represent a fundamental shift in problem-solving. The object-oriented thought process is about modeling the world, managing complexity, and building systems that are resilient to change.</p>
+            <p>By focusing on objects, their responsibilities, and their collaborations, you gain the ability to create software that is not only functional but also logical, maintainable, and elegant. This mindset is your most powerful tool. Carry it forward, apply it consistently, and you will find yourself capable of tackling challenges of ever-increasing complexity with confidence and clarity.</p>
+        `,
+        interactive: null,
+        quiz: null
+    }
+];

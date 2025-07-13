@@ -1,0 +1,132 @@
+import { courseContent, prerequisiteQuiz } from './content_data.js';
+import { renderQuiz } from './quiz_manager.js';
+
+lucide.createIcons();
+
+const navList = document.querySelector('#chapter-nav ul');
+const contentSectionsContainer = document.getElementById('content-sections');
+
+
+const allSectionsData = [
+    { id: 'prerequisite-check', navTitle: 'Prerequisite Check', title: 'Prerequisite Check' },
+    ...courseContent
+];
+
+allSectionsData.forEach(item => {
+    const li = document.createElement('li');
+    li.innerHTML = `
+        <a href="#${item.id}" class="nav-link flex items-center p-2 rounded-md hover:bg-navy-light transition-colors">
+            <span class="status-icon mr-3"></span>
+            <span class="link-text">${item.navTitle}</span>
+        </a>
+    `;
+    navList.appendChild(li);
+
+    const section = document.createElement('section');
+    section.id = item.id;
+    section.className = 'chapter-section mb-20';
+
+    let sectionHTML = `<h2 class="!mb-8">${item.title}</h2>`;
+
+    if (item.id === 'prerequisite-check') {
+        sectionHTML += `
+            <p>Before we dive in, let's ensure you have the foundational knowledge needed to get the most out of this book. This short quiz will test your understanding of basic programming concepts.</p>
+            <div class="quiz-container" id="prereq-quiz-container"></div>`;
+    } else {
+        sectionHTML += item.content;
+    }
+
+    if (item.interactive) {
+        sectionHTML += `
+            <div class="interactive-placeholder">
+                <h4>Interactive Element: ${item.interactive.title}</h4>
+                <p>${item.interactive.description}</p>
+            </div>`;
+    }
+
+    if (item.quiz) {
+        sectionHTML += `<div class="quiz-container" id="quiz-${item.id}"></div>`;
+    }
+    
+    section.innerHTML = sectionHTML;
+    contentSectionsContainer.appendChild(section);
+});
+
+renderQuiz(document.getElementById('prereq-quiz-container'), prerequisiteQuiz);
+courseContent.forEach(item => {
+    if (item.quiz) {
+        renderQuiz(document.getElementById(`quiz-${item.id}`), item.quiz);
+    }
+});
+
+const sidebarToggle = document.getElementById('sidebar-toggle');
+const mobileMenuButton = document.getElementById('mobile-menu-button');
+const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+const appContainer = document.getElementById('app-container');
+const body = document.body;
+const navLinks = document.querySelectorAll('.nav-link');
+const sections = document.querySelectorAll('.chapter-section');
+
+sidebarToggle.addEventListener('click', () => {
+    if (window.innerWidth > 768) {
+        appContainer.classList.toggle('sidebar-collapsed');
+    } else {
+        body.classList.remove('sidebar-mobile-open');
+    }
+});
+
+mobileMenuButton.addEventListener('click', () => {
+    body.classList.add('sidebar-mobile-open');
+});
+
+mobileMenuOverlay.addEventListener('click', () => {
+    body.classList.remove('sidebar-mobile-open');
+});
+
+const observerOptions = {
+    root: document.getElementById('main-content'),
+    rootMargin: '-40% 0px -60% 0px',
+    threshold: 0,
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const id = entry.target.getAttribute('id');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${id}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+    });
+}, observerOptions);
+
+sections.forEach(section => {
+    observer.observe(section);
+});
+
+navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const href = this.getAttribute('href');
+        const targetElement = document.querySelector(href);
+        if (targetElement) {
+            targetElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        if (window.innerWidth <= 768) {
+            body.classList.remove('sidebar-mobile-open');
+        }
+    });
+});
+
+document.querySelectorAll('.tooltip').forEach(tooltipEl => {
+    const tooltipText = document.createElement('span');
+    tooltipText.className = 'tooltip-text';
+    tooltipText.textContent = tooltipEl.dataset.tooltip;
+    tooltipEl.appendChild(tooltipText);
+});

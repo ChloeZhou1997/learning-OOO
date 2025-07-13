@@ -1,0 +1,300 @@
+.gatekeeper-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.context-selector {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+.context-selector h3 {
+  margin: 0 0 15px 0;
+  color: #495057;
+  font-size: 18px;
+}
+
+.context-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.context-btn {
+  padding: 10px 20px;
+  border: 2px solid #dee2e6;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.context-btn:hover {
+  background: #e9ecef;
+}
+
+.context-btn.active {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.class-diagram {
+  background: white;
+  border: 3px solid #212529;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.class-header {
+  background: #212529;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+.class-header h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.class-sections {
+  padding: 0;
+}
+
+.class-section {
+  border-bottom: 2px solid #dee2e6;
+  transition: all 0.3s ease;
+}
+
+.class-section:last-child {
+  border-bottom: none;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: #f8f9fa;
+  font-weight: 600;
+}
+
+.modifier-label {
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.class-section.private .modifier-label {
+  color: #dc3545;
+}
+
+.class-section.protected .modifier-label {
+  color: #ffc107;
+}
+
+.class-section.public .modifier-label {
+  color: #28a745;
+}
+
+.access-indicator {
+  font-size: 18px;
+}
+
+.members-list {
+  padding: 10px;
+  background: white;
+}
+
+.member-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  margin: 5px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.member-item.accessible:hover {
+  background: #e7f3ff;
+  transform: translateX(5px);
+}
+
+.member-item.blocked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.member-item.blocked:hover {
+  background: #dc354510;
+}
+
+.member-icon {
+  font-size: 20px;
+}
+
+.member-name {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 14px;
+  color: #495057;
+}
+
+.class-section.accessible {
+  background: #28a74508;
+}
+
+.class-section.blocked {
+  background: #dc354508;
+}
+
+.access-log {
+  background: #212529;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  min-height: 200px;
+}
+
+.access-log h3 {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  color: #f8f9fa;
+}
+
+.log-empty {
+  color: #6c757d;
+  font-style: italic;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.log-entries {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 13px;
+}
+
+.log-entry {
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.log-entry.success {
+  background: #28a74520;
+  border-left: 3px solid #28a745;
+}
+
+.log-entry.denied {
+  background: #dc354520;
+  border-left: 3px solid #dc3545;
+}
+
+.log-time {
+  color: #6c757d;
+  font-size: 12px;
+  min-width: 80px;
+}
+
+.log-context {
+  color: #17a2b8;
+  font-weight: 600;
+}
+
+.log-message {
+  flex: 1;
+}
+
+.modifier-guide {
+  background: #e7f3ff;
+  border: 1px solid #b3d9ff;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.modifier-guide h4 {
+  margin: 0 0 15px 0;
+  color: #004085;
+  font-size: 16px;
+}
+
+.guide-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.guide-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 14px;
+  color: #495057;
+}
+
+.modifier-badge {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 80px;
+  text-align: center;
+}
+
+.modifier-badge.private {
+  background: #dc3545;
+  color: white;
+}
+
+.modifier-badge.protected {
+  background: #ffc107;
+  color: #212529;
+}
+
+.modifier-badge.public {
+  background: #28a745;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .context-buttons {
+    justify-content: center;
+  }
+  
+  .guide-items {
+    gap: 15px;
+  }
+  
+  .guide-item {
+    flex-direction: column;
+    text-align: center;
+  }
+}
