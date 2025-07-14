@@ -2,6 +2,14 @@ export default {
 id: 'chapter-15',
 navTitle: '15. The End Game',
 title: 'Chapter 15: The End Game: Your Journey to Mastery',
+learningObjectives: [
+'Synthesize and articulate the core object-oriented concepts: encapsulation, inheritance, polymorphism, and composition',
+'Demonstrate the paradigm shift from procedural to object-oriented thinking in problem-solving',
+'Apply design acumen to identify classes, define responsibilities, and map collaborations from system requirements',
+'Evaluate and create maintainable software designs by managing coupling and creating clear public interfaces',
+'Analyze real-world systems through an object-oriented lens, identifying objects, their state, behavior, and collaborations',
+'Reflect on your journey from understanding syntax to mastering the object-oriented paradigm'
+],
 content: `
 <p>This book's ultimate goal was to instill a fundamental and instinctual <strong>object-oriented way of thinking</strong>. By reaching this point, you have moved beyond simply knowing the syntax of an OO language to truly understanding the paradigm's power. This is the difference between a coder and a software designer.</p>
 <p>Let's recap the core skills you've developed:</p>
@@ -15,7 +23,7 @@ content: `
 `,
 interactive: {
 title: 'Your Final Blueprint',
-description: 'A reflective exercise. You are presented with a new project requirement: "Design a simple system to manage a personal library of books." You are given a text area to outline the primary classes you would create (e.g., Book, Library, Member) and list their main responsibilities.',
+description: 'A reflective exercise. You are presented with a new project requirement: "Design a simple drawing application with shapes and tools." You are given a text area to outline the primary classes you would create (e.g., Shape, Canvas, Tool) and list their main responsibilities.',
 component: null
 },
 quiz: {

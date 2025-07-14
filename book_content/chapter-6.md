@@ -30,9 +30,10 @@ Despite the best intentions and planning, in all but the most trivial cases, the
 It is important to understand that many design methodologies are available. One early methodology, called the waterfall model, advocates strict boundaries between the various phases. In this case, the design phase is completed before the implementation phase, which is completed before the testing phase, and so on. In practice, the waterfall model has been found to be unrealistic. Currently there are other design models, such as rapid prototyp- ing, that promote a true iterative process. In these models, some implementation is at- tempted prior to completing the design phase as a type of proof-of-concept. Despite the recent aversion to the waterfall model, the goal behind the model is understandable. Com- ing up with a complete and thorough design before starting to code is a sound practice. You do not want to be in the release phase of the product and then decide to iterate through the design phase again. Iterating across phase boundaries is unavoidable; however, you should keep these iterations to a minimum (see Figure 6.1).
 
 Simply put, the reasons to identify requirements early and keep design changes to a minimum are as follows:
-- The cost of a requirement/design change in the design phase is relatively small.
-- The cost of a design change in the implementation phase is significantly higher.
-- The cost of a design change after the deployment phase is astronomical when com- pared to the first item.
+
+1. **Design Phase**: The cost of a requirement/design change in the design phase is relatively small.
+2. **Implementation Phase**: The cost of a design change in the implementation phase is significantly higher.
+3. **Deployment Phase**: The cost of a design change after the deployment phase is astronomical when compared to the first item.
 
 Similarly, you would not want to start the construction of your dream house before the architectural design was complete. If I said that the Golden Gate Bridge or the Empire State Building was constructed without any consideration of design issues, you would consider the statement absolutely crazy. Yet, you would most likely not find it crazy if I told you that the software you were using might contain some design flaws, and in fact, might not have been thoroughly tested.
 

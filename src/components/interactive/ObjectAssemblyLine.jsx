@@ -8,43 +8,43 @@ const ObjectAssemblyLine = () => {
 
   const steps = [
     {
-      id: 'allocate',
-      title: '1. Memory Allocation',
-      description: 'System allocates memory space for the new object',
-      icon: '💾',
-      code: '// Memory is reserved\nlet person = { }',
-      visual: 'empty-space'
+      id: 'scan',
+      title: '1. Component Scanning',
+      description: 'Spring scans for @Component, @Service, @Repository annotations',
+      icon: '🔍',
+      code: '@Service\n@Transactional\npublic class UserService {\n  // Spring detects this class\n}',
+      visual: 'scanning'
     },
     {
-      id: 'construct',
-      title: '2. Constructor Called',
-      description: 'Constructor initializes the object with provided values',
-      icon: '🔨',
-      code: 'constructor(name, age) {\n  this.name = name\n  this.age = age\n}',
-      visual: 'filling'
+      id: 'instantiate',
+      title: '2. Bean Instantiation',
+      description: 'Spring creates instance using reflection or factory',
+      icon: '🏗️',
+      code: '// Spring internally does:\nUserService userService = \n  constructor.newInstance();',
+      visual: 'instantiating'
     },
     {
-      id: 'initialize',
-      title: '3. Field Initialization',
-      description: 'Default values are set for any uninitialized fields',
-      icon: '⚙️',
-      code: 'this.id = generateId()\nthis.createdAt = new Date()\nthis.active = true',
-      visual: 'complete'
+      id: 'inject',
+      title: '3. Dependency Injection',
+      description: '@Autowired dependencies are injected',
+      icon: '💉',
+      code: '@Autowired\nprivate UserRepository userRepo;\n@Autowired\nprivate EmailService emailService;',
+      visual: 'injecting'
     },
     {
-      id: 'validate',
-      title: '4. Validation',
-      description: 'Constructor validates the object state before returning',
-      icon: '✅',
-      code: 'if (age < 0) {\n  throw new Error("Invalid age")\n}',
-      visual: 'validated'
+      id: 'postconstruct',
+      title: '4. Post-Construction',
+      description: '@PostConstruct methods are called',
+      icon: '🚀',
+      code: '@PostConstruct\npublic void init() {\n  cache.warmUp();\n  logger.info("Service ready");\n}',
+      visual: 'postconstruct'
     },
     {
-      id: 'ready',
-      title: '5. Object Ready',
-      description: 'Fully initialized object is returned to the caller',
-      icon: '🎉',
-      code: 'return person // Ready to use!',
+      id: 'proxy',
+      title: '5. Proxy Creation',
+      description: 'AOP proxy wraps the bean for transactions, security, etc.',
+      icon: '🎭',
+      code: '// Spring creates proxy:\nUserService proxy = \n  createProxy(userService);\n// Adds @Transactional behavior',
       visual: 'ready'
     }
   ]
@@ -67,11 +67,13 @@ const ObjectAssemblyLine = () => {
       } else {
         setIsAnimating(false)
         setCreatedObject({
-          name: 'John Doe',
-          age: 30,
-          id: 'USR-12345',
-          createdAt: new Date().toLocaleString(),
-          active: true
+          beanName: 'userService',
+          class: 'com.example.UserService',
+          scope: 'singleton',
+          dependencies: ['userRepository', 'emailService'],
+          proxied: true,
+          transactional: true,
+          initialized: new Date().toLocaleString()
         })
       }
     }
@@ -83,58 +85,58 @@ const ObjectAssemblyLine = () => {
     const step = steps[currentStep]
     
     switch(step.visual) {
-      case 'empty-space':
+      case 'scanning':
         return (
-          <div className="object-visual empty">
+          <div className="object-visual scanning">
             <div className="memory-block">
-              <span>Memory Block</span>
+              <span>🔍 Scanning Classpath...</span>
               <div className="empty-slots">
-                <div className="slot empty"></div>
-                <div className="slot empty"></div>
-                <div className="slot empty"></div>
+                <div className="slot scanning">@Service detected</div>
+                <div className="slot scanning">@Transactional detected</div>
+                <div className="slot empty">Preparing bean...</div>
               </div>
             </div>
           </div>
         )
-      case 'filling':
+      case 'instantiating':
         return (
           <div className="object-visual filling">
             <div className="memory-block">
-              <span>Person Object</span>
+              <span>UserService Bean</span>
               <div className="slots">
-                <div className="slot filled">name: "John Doe"</div>
-                <div className="slot filled">age: 30</div>
-                <div className="slot empty"></div>
+                <div className="slot filled">instance: UserService@4a3f</div>
+                <div className="slot filled">scope: "singleton"</div>
+                <div className="slot empty">dependencies: pending...</div>
               </div>
             </div>
           </div>
         )
-      case 'complete':
+      case 'injecting':
         return (
           <div className="object-visual complete">
             <div className="memory-block">
-              <span>Person Object</span>
+              <span>UserService Bean</span>
               <div className="slots">
-                <div className="slot filled">name: "John Doe"</div>
-                <div className="slot filled">age: 30</div>
-                <div className="slot filled">id: "USR-12345"</div>
-                <div className="slot filled">createdAt: "{new Date().toLocaleTimeString()}"</div>
-                <div className="slot filled">active: true</div>
+                <div className="slot filled">instance: UserService@4a3f</div>
+                <div className="slot filled">userRepository: ✓ Injected</div>
+                <div className="slot filled">emailService: ✓ Injected</div>
+                <div className="slot filled">transactionManager: ✓ Injected</div>
+                <div className="slot pending">initialization: pending...</div>
               </div>
             </div>
           </div>
         )
-      case 'validated':
+      case 'postconstruct':
         return (
           <div className="object-visual validated">
             <div className="memory-block validated">
-              <span>Person Object ✓</span>
+              <span>UserService Bean ✓</span>
               <div className="slots">
-                <div className="slot filled validated">name: "John Doe" ✓</div>
-                <div className="slot filled validated">age: 30 ✓</div>
-                <div className="slot filled">id: "USR-12345"</div>
-                <div className="slot filled">createdAt: "{new Date().toLocaleTimeString()}"</div>
-                <div className="slot filled">active: true</div>
+                <div className="slot filled validated">dependencies: ✓ All injected</div>
+                <div className="slot filled validated">@PostConstruct: ✓ Executed</div>
+                <div className="slot filled validated">cache: ✓ Warmed up</div>
+                <div className="slot filled validated">logger: ✓ Configured</div>
+                <div className="slot pending">proxy: creating...</div>
               </div>
             </div>
           </div>
@@ -143,13 +145,13 @@ const ObjectAssemblyLine = () => {
         return (
           <div className="object-visual ready">
             <div className="memory-block ready">
-              <span>Person Object 🎉</span>
+              <span>UserService Proxy 🎉</span>
               <div className="slots">
-                <div className="slot filled ready">name: "John Doe"</div>
-                <div className="slot filled ready">age: 30</div>
-                <div className="slot filled ready">id: "USR-12345"</div>
-                <div className="slot filled ready">createdAt: "{new Date().toLocaleTimeString()}"</div>
-                <div className="slot filled ready">active: true</div>
+                <div className="slot filled ready">type: CGLIBProxy$UserService</div>
+                <div className="slot filled ready">@Transactional: ✓ Enabled</div>
+                <div className="slot filled ready">@Cacheable: ✓ Enabled</div>
+                <div className="slot filled ready">@Secured: ✓ Enabled</div>
+                <div className="slot filled ready">Status: Ready for requests!</div>
               </div>
             </div>
           </div>
@@ -162,7 +164,7 @@ const ObjectAssemblyLine = () => {
   return (
     <div className="assembly-line-container">
       <div className="assembly-header">
-        <h3>Object Creation Assembly Line</h3>
+        <h3>Spring Bean Lifecycle</h3>
         <button 
           className="run-animation-btn"
           onClick={runFullAnimation}
@@ -218,10 +220,16 @@ const ObjectAssemblyLine = () => {
 
       <div className="explanation">
         <p>
-          <strong>Key Concept:</strong> Object creation is a multi-step process. 
-          The constructor ensures that every object starts life in a valid, 
-          consistent state. This prevents bugs caused by partially initialized objects.
+          <strong>Spring's IoC Container:</strong> Spring manages object creation through a sophisticated 
+          lifecycle. It handles dependency injection, initialization callbacks, and AOP proxy creation 
+          automatically. This is how frameworks like Spring Boot can wire together complex applications 
+          with minimal configuration.
         </p>
+        <div className="framework-insight">
+          <strong>Real-world impact:</strong> Companies like Netflix, Uber, and LinkedIn use Spring's 
+          dependency injection to manage thousands of beans in their microservices, ensuring consistent 
+          initialization and proper resource management.
+        </div>
       </div>
     </div>
   )

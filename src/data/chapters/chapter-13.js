@@ -57,19 +57,20 @@ content: `
 <h2>3. Data Transfer Objects (DTOs)</h2>
 <p>DTOs are simple objects that carry data between tiers:</p>
 <pre><code>// Domain object (server-side)
-public class User {
+public class GameObject {
 private Long id;
-private String username;
-private String passwordHash;
-private Set<Role> roles;
+private String name;
+private Vector3 position;
+private Set<Component> components;
 // Business methods...
 }
 
 // DTO for client communication
-public class UserDTO {
+public class GameObjectDTO {
 private Long id;
-private String username;
-private List<String> roleNames;
+private String name;
+private float x, y, z;
+private List<String> componentTypes;
 // Only getters/setters, no business logic
 }</code></pre>
 
@@ -113,7 +114,7 @@ questions: [
 { type: 'fill-in', question: 'The client-side proxy object in RPC is called a ________.', answer: 'stub' },
 { type: 'fill-in', question: 'Converting objects to a format suitable for network transmission is called ________.', answer: 'marshaling' },
 { type: 'fill-in', question: 'An operation that can be safely repeated without changing the result is called ________.', answer: 'idempotent' },
-{ type: 'coding-challenge', question: 'Create a ProductDTO class and a mapper to convert between a Product domain object and its DTO. The domain object has sensitive cost information that should not be sent to clients.', modelAnswer: '// Domain object\npublic class Product {\n    private Long id;\n    private String name;\n    private String description;\n    private BigDecimal costPrice; // Sensitive\n    private BigDecimal sellPrice;\n    private Integer stockLevel;\n    private Supplier supplier; // Complex object\n    \n    // Getters, setters, business methods...\n}\n\n// DTO for client communication\npublic class ProductDTO {\n    private Long id;\n    private String name;\n    private String description;\n    private BigDecimal price; // Only selling price\n    private Boolean inStock; // Simplified stock info\n    private String supplierName; // Flattened relationship\n    \n    // Only getters and setters\n    public Long getId() { return id; }\n    public void setId(Long id) { this.id = id; }\n    // ... other getters/setters\n}\n\n// Mapper class\npublic class ProductMapper {\n    public static ProductDTO toDTO(Product product) {\n        ProductDTO dto = new ProductDTO();\n        dto.setId(product.getId());\n        dto.setName(product.getName());\n        dto.setDescription(product.getDescription());\n        dto.setPrice(product.getSellPrice());\n        dto.setInStock(product.getStockLevel() > 0);\n        if (product.getSupplier() != null) {\n            dto.setSupplierName(product.getSupplier().getName());\n        }\n        return dto;\n    }\n    \n    public static Product fromDTO(ProductDTO dto) {\n        Product product = new Product();\n        product.setId(dto.getId());\n        product.setName(dto.getName());\n        product.setDescription(dto.getDescription());\n        product.setSellPrice(dto.getPrice());\n        // Note: Cannot set costPrice, stockLevel, or supplier from DTO\n        return product;\n    }\n    \n    public static List<ProductDTO> toDTOList(List<Product> products) {\n        return products.stream()\n            .map(ProductMapper::toDTO)\n            .collect(Collectors.toList());\n    }\n}' }
+{ type: 'coding-challenge', question: 'Create a ShapeDTO class and a mapper to convert between a Shape domain object and its DTO. The domain object has internal rendering details that should not be sent to clients.', modelAnswer: '// Domain object\npublic class Shape {\n    private Long id;\n    private String type;\n    private Color color;\n    private Transform transform; // Complex internal structure\n    private RenderState renderState; // Internal rendering details\n    private BoundingBox bounds; // Computed property\n    \n    // Getters, setters, business methods...\n}\n\n// DTO for client communication\npublic class ShapeDTO {\n    private Long id;\n    private String type;\n    private String colorHex; // Simplified color representation\n    private float x, y, z; // Flattened position\n    private float rotation; // Simplified rotation\n    private float width, height; // Simplified bounds\n    \n    // Only getters and setters\n    public Long getId() { return id; }\n    public void setId(Long id) { this.id = id; }\n    // ... other getters/setters\n}\n\n// Mapper class\npublic class ShapeMapper {\n    public static ShapeDTO toDTO(Shape shape) {\n        ShapeDTO dto = new ShapeDTO();\n        dto.setId(shape.getId());\n        dto.setType(shape.getType());\n        dto.setColorHex(colorToHex(shape.getColor()));\n        \n        Transform t = shape.getTransform();\n        dto.setX(t.getPosition().getX());\n        dto.setY(t.getPosition().getY());\n        dto.setZ(t.getPosition().getZ());\n        dto.setRotation(t.getRotation().getY()); // Simplified to Y-axis rotation\n        \n        BoundingBox bounds = shape.getBounds();\n        dto.setWidth(bounds.getWidth());\n        dto.setHeight(bounds.getHeight());\n        \n        return dto;\n    }\n    \n    public static Shape fromDTO(ShapeDTO dto) {\n        Shape shape = new Shape();\n        shape.setId(dto.getId());\n        shape.setType(dto.getType());\n        shape.setColor(hexToColor(dto.getColorHex()));\n        \n        Transform transform = new Transform();\n        transform.setPosition(new Vector3(dto.getX(), dto.getY(), dto.getZ()));\n        transform.setRotation(new Vector3(0, dto.getRotation(), 0));\n        shape.setTransform(transform);\n        \n        // Note: Cannot set renderState or bounds from DTO\n        return shape;\n    }\n    \n    private static String colorToHex(Color color) {\n        return String.format("#%02x%02x%02x", \n            color.getRed(), color.getGreen(), color.getBlue());\n    }\n    \n    private static Color hexToColor(String hex) {\n        return Color.decode(hex);\n    }\n}' }
 ]
 }
 };

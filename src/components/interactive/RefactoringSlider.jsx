@@ -4,82 +4,94 @@ import './RefactoringSlider.css'
 const RefactoringSlider = () => {
   const [sliderValue, setSliderValue] = useState(0)
 
-  const proceduralCode = `// Procedural Approach
-function manageLibrary() {
-  // Data stored as separate variables
-  let bookTitle = "The Object-Oriented Thought Process"
-  let bookISBN = "978-0135181966"
-  let bookAvailable = true
+  const proceduralCode = `// jQuery Approach (Procedural DOM Manipulation)
+$(document).ready(function() {
+  // Global state variables
+  var todoItems = []
+  var todoId = 0
   
-  let memberName = "Alice Johnson"
-  let memberID = "M001"
-  let memberBooks = []
+  // Direct DOM manipulation
+  $('#add-button').click(function() {
+    var inputText = $('#todo-input').val()
+    if (inputText) {
+      todoId++
+      todoItems.push({ id: todoId, text: inputText, done: false })
+      
+      // Manually create and append HTML
+      var todoHtml = '<li id="todo-' + todoId + '">' +
+                     '<span>' + inputText + '</span>' +
+                     '<button onclick="deleteTodo(' + todoId + ')">Delete</button>' +
+                     '</li>'
+      $('#todo-list').append(todoHtml)
+      $('#todo-input').val('')
+    }
+  })
   
-  // Functions operate on external data
-  if (bookAvailable) {
-    memberBooks.push(bookTitle)
-    bookAvailable = false
-    console.log(\`\${memberName} borrowed \${bookTitle}\`)
+  // Global function pollutes namespace
+  window.deleteTodo = function(id) {
+    $('#todo-' + id).remove()
+    todoItems = todoItems.filter(function(item) {
+      return item.id !== id
+    })
+  }
+})`
+
+  const objectOrientedCode = `// React Approach (Component-Based OOP)
+class TodoApp extends React.Component {
+  constructor(props) {
+    super(props)
+    // Encapsulated state
+    this.state = {
+      todos: [],
+      nextId: 1
+    }
   }
   
-  // Return book
-  if (memberBooks.includes(bookTitle)) {
-    memberBooks = memberBooks.filter(b => b !== bookTitle)
-    bookAvailable = true
-    console.log(\`\${memberName} returned \${bookTitle}\`)
+  // Methods bound to component
+  addTodo = (text) => {
+    if (text) {
+      this.setState(prevState => ({
+        todos: [...prevState.todos, {
+          id: prevState.nextId,
+          text: text,
+          done: false
+        }],
+        nextId: prevState.nextId + 1
+      }))
+    }
+  }
+  
+  deleteTodo = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => todo.id !== id)
+    }))
+  }
+  
+  render() {
+    return (
+      <div>
+        <TodoInput onAdd={this.addTodo} />
+        <TodoList 
+          todos={this.state.todos} 
+          onDelete={this.deleteTodo} 
+        />
+      </div>
+    )
+  }
+}
+
+// Separate, reusable components
+class TodoItem extends React.Component {
+  render() {
+    const { todo, onDelete } = this.props
+    return (
+      <li>
+        <span>{todo.text}</span>
+        <button onClick={() => onDelete(todo.id)}>Delete</button>
+      </li>
+    )
   }
 }`
-
-  const objectOrientedCode = `// Object-Oriented Approach
-class Book {
-  constructor(title, isbn) {
-    this.title = title
-    this.isbn = isbn
-    this.available = true
-  }
-  
-  checkout() {
-    if (this.available) {
-      this.available = false
-      return true
-    }
-    return false
-  }
-  
-  return() {
-    this.available = true
-  }
-}
-
-class Member {
-  constructor(name, id) {
-    this.name = name
-    this.id = id
-    this.borrowedBooks = []
-  }
-  
-  borrowBook(book) {
-    if (book.checkout()) {
-      this.borrowedBooks.push(book)
-      console.log(\`\${this.name} borrowed \${book.title}\`)
-    }
-  }
-  
-  returnBook(book) {
-    const index = this.borrowedBooks.indexOf(book)
-    if (index > -1) {
-      this.borrowedBooks.splice(index, 1)
-      book.return()
-      console.log(\`\${this.name} returned \${book.title}\`)
-    }
-  }
-}
-
-// Usage
-const book = new Book("The Object-Oriented Thought Process", "978-0135181966")
-const member = new Member("Alice Johnson", "M001")
-member.borrowBook(book)
-member.returnBook(book)`
 
   const getHighlightedCode = () => {
     const progress = sliderValue / 100
@@ -87,32 +99,32 @@ member.returnBook(book)`
     if (progress < 0.2) {
       return {
         code: proceduralCode,
-        highlights: ['let bookTitle', 'let bookISBN', 'let memberName', 'let memberID'],
-        message: 'Procedural: Data is scattered as separate variables'
+        highlights: ['var todoItems', 'var todoId', 'window.deleteTodo'],
+        message: 'jQuery: Global variables and functions pollute namespace'
       }
     } else if (progress < 0.4) {
       return {
         code: proceduralCode,
-        highlights: ['if (bookAvailable)', 'memberBooks.push', 'console.log'],
-        message: 'Procedural: Logic operates on external data directly'
+        highlights: ['#add-button', '$(\'#todo-list\').append', 'onclick='],
+        message: 'jQuery: Direct DOM manipulation and inline event handlers'
       }
     } else if (progress < 0.6) {
       return {
         code: objectOrientedCode,
-        highlights: ['class Book', 'class Member'],
-        message: 'OOP: Data and behavior are grouped into classes'
+        highlights: ['class TodoApp', 'class TodoItem', 'extends React.Component'],
+        message: 'React: Components encapsulate UI logic and state'
       }
     } else if (progress < 0.8) {
       return {
         code: objectOrientedCode,
-        highlights: ['constructor', 'this.title', 'this.name', 'this.borrowedBooks'],
-        message: 'OOP: Objects encapsulate their own state'
+        highlights: ['this.state', 'setState', 'prevState'],
+        message: 'React: State is encapsulated and immutably updated'
       }
     } else {
       return {
         code: objectOrientedCode,
-        highlights: ['checkout()', 'borrowBook()', 'returnBook()'],
-        message: 'OOP: Objects interact through methods, not direct data access'
+        highlights: ['onAdd={this.addTodo}', 'onDelete={this.deleteTodo}', 'props'],
+        message: 'React: Components communicate through props, not global functions'
       }
     }
   }
@@ -158,23 +170,32 @@ member.returnBook(book)`
 
       <div className="comparison-points">
         <div className="comparison-column procedural">
-          <h4>Procedural Characteristics</h4>
+          <h4>jQuery (Procedural) Problems</h4>
           <ul>
-            <li>Data and functions are separate</li>
-            <li>Functions operate on global data</li>
-            <li>Focus on "what happens next"</li>
-            <li>Difficult to maintain as it grows</li>
+            <li>Global state pollution</li>
+            <li>DOM manipulation scattered everywhere</li>
+            <li>Hard to test and debug</li>
+            <li>No clear component boundaries</li>
           </ul>
         </div>
         <div className="comparison-column oop">
-          <h4>Object-Oriented Characteristics</h4>
+          <h4>React (Component-Based) Benefits</h4>
           <ul>
-            <li>Data and methods are bundled together</li>
-            <li>Objects manage their own state</li>
-            <li>Focus on "what are the things"</li>
-            <li>Easier to extend and maintain</li>
+            <li>Encapsulated component state</li>
+            <li>Declarative UI updates</li>
+            <li>Reusable, testable components</li>
+            <li>Clear data flow through props</li>
           </ul>
         </div>
+      </div>
+      
+      <div className="framework-insight">
+        <h4>🚀 Real-World Impact:</h4>
+        <p>
+          This transformation from jQuery to React represents a major shift in web development. 
+          Companies like Facebook, Netflix, and Airbnb migrated from jQuery's procedural approach 
+          to React's component-based architecture, resulting in more maintainable, scalable applications.
+        </p>
       </div>
     </div>
   )

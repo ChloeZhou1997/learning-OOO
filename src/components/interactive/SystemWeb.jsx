@@ -3,46 +3,81 @@ import './SystemWeb.css'
 
 const SystemWeb = () => {
   const [couplingLevel, setCouplingLevel] = useState(50)
-  const [selectedClass, setSelectedClass] = useState(null)
+  const [selectedService, setSelectedService] = useState(null)
   const [animating, setAnimating] = useState(false)
+  const [architecture, setArchitecture] = useState('microservices')
 
-  const classes = [
-    { id: 'ui', name: 'UserInterface', x: 150, y: 100 },
-    { id: 'auth', name: 'AuthService', x: 450, y: 100 },
-    { id: 'user', name: 'UserManager', x: 300, y: 250 },
-    { id: 'db', name: 'Database', x: 150, y: 400 },
-    { id: 'logger', name: 'Logger', x: 450, y: 400 },
-    { id: 'config', name: 'ConfigService', x: 600, y: 250 }
+  // Netflix-style microservices architecture
+  const microservices = [
+    { id: 'api-gateway', name: 'API Gateway', x: 375, y: 50, tech: 'Spring Cloud Gateway' },
+    { id: 'auth', name: 'Auth Service', x: 150, y: 150, tech: 'OAuth2/JWT' },
+    { id: 'user', name: 'User Service', x: 375, y: 150, tech: 'Spring Boot' },
+    { id: 'recommendation', name: 'Recommendation Service', x: 600, y: 150, tech: 'Python/ML' },
+    { id: 'video', name: 'Video Service', x: 150, y: 250, tech: 'Node.js/FFmpeg' },
+    { id: 'analytics', name: 'Analytics Service', x: 375, y: 250, tech: 'Spark/Kafka' },
+    { id: 'payment', name: 'Payment Service', x: 600, y: 250, tech: 'Spring Boot' },
+    { id: 'eureka', name: 'Service Registry', x: 150, y: 350, tech: 'Netflix Eureka' },
+    { id: 'config', name: 'Config Server', x: 375, y: 350, tech: 'Spring Cloud Config' },
+    { id: 'circuit', name: 'Circuit Breaker', x: 600, y: 350, tech: 'Hystrix/Resilience4j' }
   ]
 
-  const connections = [
-    { from: 'ui', to: 'auth', type: 'uses' },
-    { from: 'ui', to: 'user', type: 'uses' },
-    { from: 'auth', to: 'user', type: 'validates' },
-    { from: 'user', to: 'db', type: 'stores' },
-    { from: 'auth', to: 'logger', type: 'logs' },
-    { from: 'user', to: 'logger', type: 'logs' },
-    { from: 'auth', to: 'config', type: 'reads' },
-    { from: 'ui', to: 'config', type: 'reads' }
+  // Connections showing different types of coupling
+  const microserviceConnections = [
+    { from: 'api-gateway', to: 'auth', type: 'REST/gRPC' },
+    { from: 'api-gateway', to: 'user', type: 'REST/gRPC' },
+    { from: 'api-gateway', to: 'video', type: 'REST/gRPC' },
+    { from: 'recommendation', to: 'user', type: 'async/Kafka' },
+    { from: 'recommendation', to: 'video', type: 'async/Kafka' },
+    { from: 'video', to: 'analytics', type: 'event stream' },
+    { from: 'user', to: 'analytics', type: 'event stream' },
+    { from: 'payment', to: 'user', type: 'REST' },
+    { from: 'api-gateway', to: 'eureka', type: 'discovery' },
+    { from: 'auth', to: 'config', type: 'config fetch' },
+    { from: 'api-gateway', to: 'circuit', type: 'resilience' }
   ]
+
+  // Monolithic architecture for comparison
+  const monolith = [
+    { id: 'ui-layer', name: 'UI Layer', x: 375, y: 100, tech: 'JSP/Thymeleaf' },
+    { id: 'controller', name: 'Controller Layer', x: 375, y: 200, tech: 'Spring MVC' },
+    { id: 'service', name: 'Service Layer', x: 375, y: 300, tech: 'Spring Services' },
+    { id: 'dao', name: 'DAO Layer', x: 375, y: 400, tech: 'Hibernate/JPA' }
+  ]
+
+  const monolithConnections = [
+    { from: 'ui-layer', to: 'controller', type: 'direct call' },
+    { from: 'controller', to: 'service', type: 'direct call' },
+    { from: 'service', to: 'dao', type: 'direct call' }
+  ]
+
+  const services = architecture === 'microservices' ? microservices : monolith
+  const connections = architecture === 'microservices' ? microserviceConnections : monolithConnections
 
   const getCouplingDescription = () => {
+    if (architecture === 'monolith') {
+      return {
+        level: 'Monolithic Architecture',
+        description: 'All components deployed as single unit. Shared memory, synchronous calls.',
+        color: '#dc3545'
+      }
+    }
+    
     if (couplingLevel < 33) {
       return {
-        level: 'Low Coupling',
-        description: 'Classes interact through well-defined interfaces. Changes are easy to make.',
+        level: 'Loose Coupling (Event-Driven)',
+        description: 'Services communicate via events/messages. Highly resilient and scalable.',
         color: '#28a745'
       }
     } else if (couplingLevel < 66) {
       return {
-        level: 'Moderate Coupling',
-        description: 'Some dependencies exist. Changes require careful consideration.',
+        level: 'Moderate Coupling (REST/gRPC)',
+        description: 'Services use synchronous APIs with circuit breakers for resilience.',
         color: '#ffc107'
       }
     } else {
       return {
-        level: 'High Coupling',
-        description: 'Classes are tightly intertwined. Changes ripple throughout the system.',
+        level: 'Tight Coupling (Direct Database)',
+        description: 'Services share databases or make synchronous calls without protection.',
         color: '#dc3545'
       }
     }
@@ -54,21 +89,21 @@ const SystemWeb = () => {
     return { thickness, opacity }
   }
 
-  const handleClassClick = (classId) => {
-    setSelectedClass(classId)
+  const handleServiceClick = (serviceId) => {
+    setSelectedService(serviceId)
     setAnimating(true)
     setTimeout(() => setAnimating(false), 600)
   }
 
-  const getConnectedClasses = (classId) => {
+  const getConnectedServices = (serviceId) => {
     return connections
-      .filter(conn => conn.from === classId || conn.to === classId)
-      .map(conn => conn.from === classId ? conn.to : conn.from)
+      .filter(conn => conn.from === serviceId || conn.to === serviceId)
+      .map(conn => conn.from === serviceId ? conn.to : conn.from)
   }
 
-  const isConnected = (classId) => {
-    if (!selectedClass) return false
-    return classId === selectedClass || getConnectedClasses(selectedClass).includes(classId)
+  const isConnected = (serviceId) => {
+    if (!selectedService) return false
+    return serviceId === selectedService || getConnectedServices(selectedService).includes(serviceId)
   }
 
   const coupling = getCouplingDescription()
@@ -77,17 +112,37 @@ const SystemWeb = () => {
   return (
     <div className="system-web-container">
       <div className="control-panel">
-        <label htmlFor="coupling-slider">Adjust Coupling Level:</label>
-        <input
-          id="coupling-slider"
-          type="range"
-          min="0"
-          max="100"
-          value={couplingLevel}
-          onChange={(e) => setCouplingLevel(e.target.value)}
-          className="coupling-slider"
-        />
-        <div className={`coupling-indicator ${coupling.level.toLowerCase().replace(' ', '-')}`}>
+        <div className="architecture-selector">
+          <button 
+            className={architecture === 'microservices' ? 'active' : ''}
+            onClick={() => setArchitecture('microservices')}
+          >
+            Microservices
+          </button>
+          <button 
+            className={architecture === 'monolith' ? 'active' : ''}
+            onClick={() => setArchitecture('monolith')}
+          >
+            Monolithic
+          </button>
+        </div>
+        
+        {architecture === 'microservices' && (
+          <>
+            <label htmlFor="coupling-slider">Communication Pattern:</label>
+            <input
+              id="coupling-slider"
+              type="range"
+              min="0"
+              max="100"
+              value={couplingLevel}
+              onChange={(e) => setCouplingLevel(e.target.value)}
+              className="coupling-slider"
+            />
+          </>
+        )}
+        
+        <div className={`coupling-indicator ${coupling.level.toLowerCase().replace(/[\s\/()]/g, '-')}`}>
           <h3 style={{ color: coupling.color }}>{coupling.level}</h3>
           <p>{coupling.description}</p>
         </div>
@@ -97,26 +152,27 @@ const SystemWeb = () => {
         <svg width="750" height="500" viewBox="0 0 750 500">
           {/* Render connections */}
           {connections.map((conn, index) => {
-            const fromClass = classes.find(c => c.id === conn.from)
-            const toClass = classes.find(c => c.id === conn.to)
-            const isHighlighted = selectedClass && (conn.from === selectedClass || conn.to === selectedClass)
+            const fromService = services.find(s => s.id === conn.from)
+            const toService = services.find(s => s.id === conn.to)
+            const isHighlighted = selectedService && (conn.from === selectedService || conn.to === selectedService)
             
             return (
               <g key={index}>
                 <line
-                  x1={fromClass.x}
-                  y1={fromClass.y}
-                  x2={toClass.x}
-                  y2={toClass.y}
+                  x1={fromService.x}
+                  y1={fromService.y}
+                  x2={toService.x}
+                  y2={toService.y}
                   stroke={isHighlighted ? coupling.color : '#6c757d'}
                   strokeWidth={isHighlighted ? connectionStyle.thickness * 1.5 : connectionStyle.thickness}
                   opacity={isHighlighted ? 1 : connectionStyle.opacity}
+                  strokeDasharray={conn.type.includes('async') || conn.type.includes('event') ? '5,5' : ''}
                   className={`connection-line ${animating && isHighlighted ? 'pulse' : ''}`}
                 />
                 {isHighlighted && (
                   <text
-                    x={(fromClass.x + toClass.x) / 2}
-                    y={(fromClass.y + toClass.y) / 2}
+                    x={(fromService.x + toService.x) / 2}
+                    y={(fromService.y + toService.y) / 2}
                     textAnchor="middle"
                     className="connection-label"
                     fill={coupling.color}
@@ -128,23 +184,23 @@ const SystemWeb = () => {
             )
           })}
 
-          {/* Render class nodes */}
-          {classes.map(cls => {
-            const connected = isConnected(cls.id)
-            const isSelected = cls.id === selectedClass
+          {/* Render service nodes */}
+          {services.map(service => {
+            const connected = isConnected(service.id)
+            const isSelected = service.id === selectedService
             
             return (
               <g
-                key={cls.id}
-                onClick={() => handleClassClick(cls.id)}
-                className="class-node"
+                key={service.id}
+                onClick={() => handleServiceClick(service.id)}
+                className="service-node"
                 style={{ cursor: 'pointer' }}
               >
                 <rect
-                  x={cls.x - 60}
-                  y={cls.y - 25}
-                  width="120"
-                  height="50"
+                  x={service.x - 70}
+                  y={service.y - 30}
+                  width="140"
+                  height="60"
                   rx="8"
                   fill={isSelected ? coupling.color : connected ? '#e7f3ff' : 'white'}
                   stroke={connected ? coupling.color : '#dee2e6'}
@@ -152,13 +208,25 @@ const SystemWeb = () => {
                   className={animating && connected ? 'node-highlight' : ''}
                 />
                 <text
-                  x={cls.x}
-                  y={cls.y + 5}
+                  x={service.x}
+                  y={service.y - 5}
                   textAnchor="middle"
-                  className="class-name"
+                  className="service-name"
                   fill={isSelected ? 'white' : '#212529'}
+                  fontSize="12"
+                  fontWeight="bold"
                 >
-                  {cls.name}
+                  {service.name}
+                </text>
+                <text
+                  x={service.x}
+                  y={service.y + 12}
+                  textAnchor="middle"
+                  className="service-tech"
+                  fill={isSelected ? 'white' : '#6c757d'}
+                  fontSize="10"
+                >
+                  {service.tech}
                 </text>
               </g>
             )
@@ -167,53 +235,67 @@ const SystemWeb = () => {
       </div>
 
       <div className="coupling-effects">
-        <h4>Effects of {coupling.level}:</h4>
+        <h4>{architecture === 'microservices' ? 'Microservices Characteristics' : 'Monolith Characteristics'}:</h4>
         <div className="effects-grid">
           <div className="effect-card">
-            <h5>🔧 Maintenance</h5>
+            <h5>📊 Scalability</h5>
             <p>
-              {couplingLevel < 33 
-                ? 'Easy to modify individual classes' 
+              {architecture === 'monolith' 
+                ? 'Scale entire application together'
+                : couplingLevel < 33 
+                ? 'Independent service scaling' 
                 : couplingLevel < 66 
-                ? 'Moderate effort required for changes' 
-                : 'Changes cascade through multiple classes'}
+                ? 'Some coordination needed' 
+                : 'Cascading failures possible'}
             </p>
           </div>
           <div className="effect-card">
-            <h5>🧪 Testing</h5>
+            <h5>🚀 Deployment</h5>
             <p>
-              {couplingLevel < 33 
-                ? 'Classes can be tested in isolation' 
+              {architecture === 'monolith' 
+                ? 'Single deployment unit'
+                : couplingLevel < 33 
+                ? 'Independent CI/CD pipelines' 
                 : couplingLevel < 66 
-                ? 'Some mock objects needed' 
-                : 'Complex test setup required'}
+                ? 'Coordinated deployments' 
+                : 'Complex deployment dependencies'}
             </p>
           </div>
           <div className="effect-card">
-            <h5>♻️ Reusability</h5>
+            <h5>💾 Data Management</h5>
             <p>
-              {couplingLevel < 33 
-                ? 'Classes are highly reusable' 
+              {architecture === 'monolith' 
+                ? 'Shared database, ACID transactions'
+                : couplingLevel < 33 
+                ? 'Service-owned databases' 
                 : couplingLevel < 66 
-                ? 'Limited reuse opportunities' 
-                : 'Difficult to reuse without dependencies'}
+                ? 'Some shared data stores' 
+                : 'Database coupling anti-pattern'}
             </p>
           </div>
           <div className="effect-card">
-            <h5>🎯 Understanding</h5>
+            <h5>🛡️ Fault Isolation</h5>
             <p>
-              {couplingLevel < 33 
-                ? 'Clear, focused responsibilities' 
+              {architecture === 'monolith' 
+                ? 'Failure affects entire system'
+                : couplingLevel < 33 
+                ? 'Failures isolated to services' 
                 : couplingLevel < 66 
-                ? 'Some complexity in interactions' 
-                : 'Hard to understand without context'}
+                ? 'Circuit breakers prevent cascades' 
+                : 'Failures propagate across services'}
             </p>
           </div>
         </div>
       </div>
 
       <div className="tips">
-        <p><strong>💡 Tip:</strong> Click on any class to see its connections. Move the slider to see how coupling affects the system's flexibility.</p>
+        <p><strong>💡 Real-world Examples:</strong></p>
+        <ul>
+          <li><strong>Netflix:</strong> 700+ microservices handling 2+ billion API requests daily</li>
+          <li><strong>Uber:</strong> Migrated from monolith to 1000+ microservices for global scale</li>
+          <li><strong>Amazon:</strong> Pioneered service-oriented architecture, enabling AWS</li>
+        </ul>
+        <p><strong>Try:</strong> Click services to see dependencies. Compare architectures and coupling levels.</p>
       </div>
     </div>
   )

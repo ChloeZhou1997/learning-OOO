@@ -2,27 +2,36 @@ import React, { useState } from 'react'
 import './DigitalCRCSession.css'
 
 const DigitalCRCSession = () => {
-  const [scenario, setScenario] = useState('library')
+  const [scenario, setScenario] = useState('pytorch')
   const [cards, setCards] = useState([])
   const [selectedCard, setSelectedCard] = useState(null)
   const [isAddingCard, setIsAddingCard] = useState(false)
   const [newCardName, setNewCardName] = useState('')
 
   const scenarios = {
-    library: {
-      name: 'Library Management System',
-      description: 'Design a system for managing books, members, and loans in a library.',
-      suggestedClasses: ['Book', 'Member', 'Loan', 'Librarian', 'Catalog']
+    pytorch: {
+      name: 'PyTorch Neural Network Framework',
+      icon: '🔥',
+      description: 'Design the core components of PyTorch\'s neural network module system (torch.nn)',
+      suggestedClasses: ['Module', 'Parameter', 'Linear', 'Conv2d', 'Optimizer', 'Tensor', 'Autograd', 'DataLoader']
     },
-    restaurant: {
-      name: 'Restaurant Ordering System',
-      description: 'Design a system for taking orders, managing tables, and processing payments.',
-      suggestedClasses: ['Table', 'Order', 'MenuItem', 'Server', 'Kitchen', 'Payment']
+    langchain: {
+      name: 'LangChain Agent System',
+      icon: '🦜',
+      description: 'Design components for building LLM-powered agents with tools and memory',
+      suggestedClasses: ['Agent', 'Tool', 'Memory', 'LLM', 'PromptTemplate', 'Chain', 'OutputParser', 'Callback']
     },
-    parking: {
-      name: 'Parking Lot System',
-      description: 'Design a system for managing parking spaces, vehicles, and payments.',
-      suggestedClasses: ['ParkingSpace', 'Vehicle', 'Ticket', 'Payment', 'Gate']
+    kafka: {
+      name: 'Apache Kafka Streaming',
+      icon: '📊',
+      description: 'Design a distributed streaming platform like Kafka for high-throughput data pipelines',
+      suggestedClasses: ['Producer', 'Consumer', 'Broker', 'Topic', 'Partition', 'ConsumerGroup', 'Offset', 'ZooKeeper']
+    },
+    react: {
+      name: 'React Component System',
+      icon: '⚛️',
+      description: 'Design the core architecture of React\'s component and rendering system',
+      suggestedClasses: ['Component', 'VirtualDOM', 'Fiber', 'Hook', 'Context', 'Reconciler', 'Renderer', 'Scheduler']
     }
   }
 
@@ -92,28 +101,88 @@ const DigitalCRCSession = () => {
     setIsAddingCard(false)
   }
 
+  // Pre-populate with example CRC card for selected scenario
+  const loadExampleCard = () => {
+    const examples = {
+      pytorch: {
+        name: 'Module',
+        responsibilities: [
+          'Manage parameters and submodules',
+          'Define forward pass computation',
+          'Track gradients for backpropagation',
+          'Support training/eval mode switching',
+          'Enable device placement (CPU/GPU)'
+        ],
+        collaborators: ['Parameter', 'Tensor', 'Autograd']
+      },
+      langchain: {
+        name: 'Agent',
+        responsibilities: [
+          'Decide which tool to use',
+          'Parse LLM output into actions',
+          'Execute tool calls',
+          'Maintain conversation history',
+          'Handle errors and retries'
+        ],
+        collaborators: ['Tool', 'LLM', 'Memory', 'OutputParser']
+      },
+      kafka: {
+        name: 'Broker',
+        responsibilities: [
+          'Store messages in topics',
+          'Manage partitions and replicas',
+          'Handle producer/consumer requests',
+          'Coordinate with cluster',
+          'Persist messages to disk'
+        ],
+        collaborators: ['Topic', 'Partition', 'Producer', 'Consumer', 'ZooKeeper']
+      },
+      react: {
+        name: 'Component',
+        responsibilities: [
+          'Define UI structure (render method)',
+          'Manage local state',
+          'Handle lifecycle events',
+          'Process props from parent',
+          'Trigger re-renders on update'
+        ],
+        collaborators: ['VirtualDOM', 'Hook', 'Context', 'Fiber']
+      }
+    }
+
+    const example = examples[scenario]
+    if (example && !cards.some(card => card.name === example.name)) {
+      const newCard = {
+        id: Date.now(),
+        ...example
+      }
+      setCards([...cards, newCard])
+    }
+  }
+
   return (
     <div className="crc-session-container">
       <div className="scenario-selector">
-        <h3>Select a Scenario:</h3>
+        <h3>Select a Framework to Design:</h3>
         <div className="scenario-buttons">
-          {Object.entries(scenarios).map(([key, scenario]) => (
+          {Object.entries(scenarios).map(([key, scenarioData]) => (
             <button
               key={key}
               className={`scenario-btn ${key === scenario ? 'active' : ''}`}
               onClick={() => resetScenario(key)}
             >
-              {scenario.name}
+              <span className="scenario-icon">{scenarioData.icon}</span>
+              <span className="scenario-name">{scenarioData.name}</span>
             </button>
           ))}
         </div>
       </div>
 
       <div className="scenario-info">
-        <h4>{scenarios[scenario].name}</h4>
+        <h4>{scenarios[scenario].icon} {scenarios[scenario].name}</h4>
         <p>{scenarios[scenario].description}</p>
         <div className="suggested-classes">
-          <strong>Suggested classes to consider:</strong>
+          <strong>Core components to design:</strong>
           <div className="suggestion-chips">
             {scenarios[scenario].suggestedClasses.map(cls => (
               <button
@@ -126,12 +195,15 @@ const DigitalCRCSession = () => {
               </button>
             ))}
           </div>
+          <button className="example-btn" onClick={loadExampleCard}>
+            📝 Load Example Card
+          </button>
         </div>
       </div>
 
       <div className="crc-workspace">
         <div className="cards-area">
-          <h3>CRC Cards</h3>
+          <h3>CRC Cards - {scenarios[scenario].name}</h3>
           <div className="cards-grid">
             {cards.map(card => (
               <div
@@ -220,7 +292,7 @@ const DigitalCRCSession = () => {
             
             <div className="editor-section">
               <h4>Responsibilities</h4>
-              <p className="section-hint">What does this class know or do?</p>
+              <p className="section-hint">What does this class know or do in the framework?</p>
               {cards.find(c => c.id === selectedCard)?.responsibilities.map((resp, index) => (
                 <div key={index} className="editable-item">
                   <span>{resp}</span>
@@ -241,7 +313,7 @@ const DigitalCRCSession = () => {
 
             <div className="editor-section">
               <h4>Collaborators</h4>
-              <p className="section-hint">Which other classes does this work with?</p>
+              <p className="section-hint">Which other framework components does this work with?</p>
               {cards.find(c => c.id === selectedCard)?.collaborators.map((collab, index) => (
                 <div key={index} className="editable-item">
                   <span>{collab}</span>
@@ -270,14 +342,36 @@ const DigitalCRCSession = () => {
         )}
       </div>
 
+      <div className="framework-insights">
+        <h4>Framework Design Insights:</h4>
+        <div className="insight-grid">
+          <div className="insight">
+            <h5>🔥 PyTorch</h5>
+            <p>Module is the central abstraction. Everything is a Module - layers, models, loss functions. This enables composability and automatic differentiation.</p>
+          </div>
+          <div className="insight">
+            <h5>🦜 LangChain</h5>
+            <p>Agent orchestrates Tool usage through LLM reasoning. The modular design allows swapping LLMs, tools, and memory systems independently.</p>
+          </div>
+          <div className="insight">
+            <h5>📊 Kafka</h5>
+            <p>Broker manages distributed state. Topics are partitioned for scalability, with producers/consumers decoupled through the broker abstraction.</p>
+          </div>
+          <div className="insight">
+            <h5>⚛️ React</h5>
+            <p>Component defines UI as a function of state. The Virtual DOM enables efficient updates by diffing component trees.</p>
+          </div>
+        </div>
+      </div>
+
       <div className="crc-tips">
-        <h4>CRC Card Tips:</h4>
+        <h4>CRC Design Process:</h4>
         <ul>
-          <li><strong>Class:</strong> A noun from your problem domain (Person, Order, etc.)</li>
-          <li><strong>Responsibilities:</strong> What the class knows (data) or does (behavior)</li>
-          <li><strong>Collaborators:</strong> Other classes needed to fulfill responsibilities</li>
-          <li>Keep responsibilities high-level - avoid implementation details</li>
-          <li>If a class has too many responsibilities, consider splitting it</li>
+          <li><strong>Start with core abstractions:</strong> What are the fundamental concepts in your framework?</li>
+          <li><strong>Single Responsibility:</strong> Each class should have one clear purpose</li>
+          <li><strong>Collaboration patterns:</strong> How do components work together to achieve framework goals?</li>
+          <li><strong>Think about extensibility:</strong> How will users extend your framework?</li>
+          <li><strong>Consider performance:</strong> Which components are on the critical path?</li>
         </ul>
       </div>
     </div>

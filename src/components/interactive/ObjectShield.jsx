@@ -6,17 +6,20 @@ const ObjectShield = () => {
   const [attempts, setAttempts] = useState([])
   const [shieldActive, setShieldActive] = useState(true)
 
-  const privateData = {
-    balance: 5000,
-    pin: '1234',
-    accountNumber: 'ACC-12345'
+  // React Component Internal State (Private)
+  const privateState = {
+    _state: 'Object { count: 42, user: "John" }',
+    _props: 'Object { theme: "dark", size: "large" }',
+    _hooks: '["useState", "useEffect"]',
+    _fiber: 'FiberNode<Component>'
   }
 
+  // React Component Public API
   const publicMethods = {
-    getBalance: () => '***' + privateData.balance.toString().slice(-2),
-    deposit: (amount) => `Deposited $${amount}`,
-    withdraw: (amount) => `Withdrew $${amount}`,
-    changePin: () => 'PIN changed successfully'
+    setState: (updates) => `State updated with ${JSON.stringify(updates)}`,
+    forceUpdate: () => 'Component re-rendered',
+    render: () => '<div>Hello World</div>',
+    componentDidMount: () => 'Lifecycle: Component mounted'
   }
 
   const handleAccess = (type, target) => {
@@ -67,18 +70,18 @@ const ObjectShield = () => {
         </div>
 
         <div className="object-core">
-          <h3>BankAccount Object</h3>
+          <h3>React Component Instance</h3>
           
           <div className="private-section">
-            <h4>🔒 Private Data</h4>
-            {Object.entries(privateData).map(([key, value]) => (
+            <h4>🔒 Private Internal State</h4>
+            {Object.entries(privateState).map(([key, value]) => (
               <div 
                 key={key}
                 className={`data-item private ${selectedAccess === 'direct' ? 'targeted' : ''}`}
                 onClick={() => selectedAccess === 'direct' && handleAccess('direct', key)}
               >
                 <span className="key">{key}:</span>
-                <span className="value">{selectedAccess === 'direct' ? '???' : value}</span>
+                <span className="value">{selectedAccess === 'direct' ? '???' : String(value)}</span>
               </div>
             ))}
           </div>
@@ -120,11 +123,16 @@ const ObjectShield = () => {
 
       <div className="explanation">
         <p>
-          <strong>Key Concept:</strong> Encapsulation protects an object's internal state. 
-          Private data cannot be accessed directly from outside the object. 
-          Instead, controlled access is provided through public methods that validate 
-          and manage how the data is used.
+          <strong>React's Encapsulation:</strong> React components hide their internal state, props, 
+          and fiber nodes from direct access. You can't directly modify _state or _fiber. 
+          Instead, React provides public APIs like setState() and lifecycle methods for controlled 
+          interaction. This ensures component integrity and enables React's reconciliation algorithm.
         </p>
+        <div className="framework-note">
+          <strong>Real-world impact:</strong> This encapsulation is why React can efficiently update 
+          the DOM, track component changes, and maintain a virtual DOM - all internal implementation 
+          details are hidden behind a clean public API.
+        </div>
       </div>
     </div>
   )

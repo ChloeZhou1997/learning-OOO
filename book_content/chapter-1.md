@@ -390,9 +390,13 @@ Although an inheritance relationship is considered an is-a relationship for reas
 ## Conclusion
 
 There is a lot to cover when discussing OO technologies. However, you should leave this chapter with a good understanding of the following topics:
-- Encapsulation—Encapsulating the data and behavior into a single object is of pri- mary importance in OO development. A single object contains both its data and behaviors and can hide what it wants from other objects.
-- Inheritance—A class can inherit from another class and take advantage of the at- tributes and methods defined by the superclass.
-- Polymorphism—Polymorphism means that similar objects can respond to the same message in different ways. For example, you might have a system with many shapes. However, a circle, a square, and a star are each drawn differently. Using polymor- phism, you can send each of these shapes the same message (for example, Draw), and each shape is responsible for drawing itself.
-- Composition—Composition means that an object is built from other objects.
+
+- **Encapsulation** — Encapsulating the data and behavior into a single object is of primary importance in OO development. A single object contains both its data and behaviors and can hide what it wants from other objects.
+
+- **Inheritance** — A class can inherit from another class and take advantage of the attributes and methods defined by the superclass.
+
+- **Polymorphism** — Polymorphism means that similar objects can respond to the same message in different ways. For example, you might have a system with many shapes. However, a circle, a square, and a star are each drawn differently. Using polymorphism, you can send each of these shapes the same message (for example, Draw), and each shape is responsible for drawing itself.
+
+- **Composition** — Composition means that an object is built from other objects.
 
 This chapter covers the fundamental OO concepts of which by now you should have a good grasp.

@@ -33,11 +33,11 @@ content: `
 
 <h3>Association</h3>
 <p>A general relationship between classes. Shown as a line:</p>
-<pre>Student ————— Course</pre>
+<pre>Player ————— Game</pre>
 
 <h3>Aggregation (Weak "has-a")</h3>
 <p>A whole-part relationship where parts can exist independently. Shown with an empty diamond:</p>
-<pre>Department ◇————— Professor</pre>
+<pre>Team ◇————— Player</pre>
 
 <h3>Composition (Strong "has-a")</h3>
 <p>A whole-part relationship where parts cannot exist without the whole. Shown with a filled diamond:</p>
@@ -84,7 +84,7 @@ questions: [
 { type: 'mcq', question: 'Which relationship represents a "whole-part" relationship where parts can exist independently?', options: ['Inheritance', 'Composition', 'Aggregation', 'Implementation'], answerIndex: 2 },
 { type: 'fill-in', question: 'In UML notation, the symbol + indicates ________ visibility.', answer: 'public' },
 { type: 'fill-in', question: 'A dashed line with an empty triangle in UML indicates interface ________.', answer: 'implementation' },
-{ type: 'coding-challenge', question: 'Convert this UML class diagram description to Java code:\n\nClass: BankAccount\n- accountNumber: String\n- balance: double\n- owner: Customer\n+ deposit(amount: double): void\n+ withdraw(amount: double): boolean\n+ getBalance(): double\n\nThe Customer class has a 1 to many relationship with BankAccount.', modelAnswer: 'public class BankAccount {\n    private String accountNumber;\n    private double balance;\n    private Customer owner;\n    \n    public BankAccount(String accountNumber, Customer owner) {\n        this.accountNumber = accountNumber;\n        this.owner = owner;\n        this.balance = 0.0;\n    }\n    \n    public void deposit(double amount) {\n        if (amount > 0) {\n            balance += amount;\n        }\n    }\n    \n    public boolean withdraw(double amount) {\n        if (amount > 0 && amount <= balance) {\n            balance -= amount;\n            return true;\n        }\n        return false;\n    }\n    \n    public double getBalance() {\n        return balance;\n    }\n}\n\npublic class Customer {\n    private String name;\n    private List<BankAccount> accounts;\n    \n    public Customer(String name) {\n        this.name = name;\n        this.accounts = new ArrayList<>();\n    }\n    \n    public void addAccount(BankAccount account) {\n        accounts.add(account);\n    }\n}' }
+{ type: 'coding-challenge', question: 'Convert this UML class diagram description to Java code:\n\nClass: Shape\n- x: double\n- y: double\n- color: Color\n+ move(dx: double, dy: double): void\n+ draw(graphics: Graphics): void\n+ getArea(): double\n\nThe Canvas class has a 1 to many relationship with Shape.', modelAnswer: 'public abstract class Shape {\n    private double x;\n    private double y;\n    private Color color;\n    \n    public Shape(double x, double y, Color color) {\n        this.x = x;\n        this.y = y;\n        this.color = color;\n    }\n    \n    public void move(double dx, double dy) {\n        this.x += dx;\n        this.y += dy;\n    }\n    \n    public abstract void draw(Graphics graphics);\n    \n    public abstract double getArea();\n    \n    protected double getX() { return x; }\n    protected double getY() { return y; }\n    protected Color getColor() { return color; }\n}\n\npublic class Canvas {\n    private String name;\n    private List<Shape> shapes;\n    \n    public Canvas(String name) {\n        this.name = name;\n        this.shapes = new ArrayList<>();\n    }\n    \n    public void addShape(Shape shape) {\n        shapes.add(shape);\n    }\n    \n    public void drawAll(Graphics graphics) {\n        for (Shape shape : shapes) {\n            shape.draw(graphics);\n        }\n    }\n}' }
 ]
 }
 };

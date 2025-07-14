@@ -172,11 +172,14 @@ During the design, it is good practice to identify a stable state for all attrib
 
 It is rare for a class to be written perfectly the first time. In most, if not all, situations, things will go wrong. Any developer who does not plan for problems is courting danger.
 
-Assuming that your code has the ability to detect and trap an error condition, you can handle the error in several different ways: On page 223 of their book Java Primer Plus, Tyma, Torok, and Downing state that there are three basic solutions to handling problems that are detected in a program: fix it, ignore the problem by squelching it, or exit the run- time in some graceful manner. On page 139 of their book Object-Oriented Design in Java, Gilbert and McCarty expand on this theme by adding the choice of throwing an excep- tion:
-- Ignore the problem—not a good idea!
-- Check for potential problems and abort the program when you find a problem.
-- Check for potential problems, catch the mistake, and attempt to fix the problem.
-- Throw an exception. (Often this is the preferred way to handle the situation.)
+Assuming that your code has the ability to detect and trap an error condition, you can handle the error in several different ways. On page 223 of their book Java Primer Plus, Tyma, Torok, and Downing state that there are three basic solutions to handling problems that are detected in a program: fix it, ignore the problem by squelching it, or exit the runtime in some graceful manner. On page 139 of their book Object-Oriented Design in Java, Gilbert and McCarty expand on this theme by adding the choice of throwing an exception.
+
+The main error handling strategies are:
+
+1. **Ignore the problem** — Not a good idea!
+2. **Check for potential problems and abort the program** when you find a problem.
+3. **Check for potential problems, catch the mistake, and attempt to fix the problem.**
+4. **Throw an exception** — Often this is the preferred way to handle the situation.
 
 These strategies are discussed in the following sections.
 

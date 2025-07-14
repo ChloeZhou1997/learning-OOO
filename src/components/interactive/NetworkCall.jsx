@@ -6,51 +6,73 @@ const NetworkCall = () => {
   const [validationError, setValidationError] = useState(null)
   const [serverProcessing, setServerProcessing] = useState(false)
   const [requestData, setRequestData] = useState({
-    username: 'alice@example.com',
-    password: 'password123'
+    query: 'What is machine learning?',
+    model: 'gpt-4',
+    temperature: 0.7
   })
 
   const steps = {
-    idle: { label: 'Ready', description: 'Waiting for user action' },
-    clientValidation: { label: 'Client Validation', description: 'Checking form data in browser' },
-    serialization: { label: 'Serialization', description: 'Converting objects to JSON' },
-    networkTransit: { label: 'Network Transit', description: 'Sending data over network' },
-    serverReceive: { label: 'Server Receives', description: 'Server receives and parses data' },
-    serverValidation: { label: 'Server Validation', description: 'Authoritative validation on server' },
-    serverProcess: { label: 'Processing', description: 'Server processes the request' },
-    serverResponse: { label: 'Response', description: 'Server sends response' },
-    clientReceive: { label: 'Client Update', description: 'Client receives and updates UI' }
+    idle: { label: 'Ready', description: 'LangChain client ready' },
+    clientValidation: { label: 'Input Validation', description: 'LangChain validates prompt' },
+    serialization: { label: 'Request Building', description: 'Creating OpenAI API request' },
+    networkTransit: { label: 'API Call', description: 'Sending to OpenAI servers' },
+    serverReceive: { label: 'OpenAI Receives', description: 'Request queued for processing' },
+    serverValidation: { label: 'Token Validation', description: 'Checking API key and limits' },
+    serverProcess: { label: 'LLM Processing', description: 'GPT-4 generating response' },
+    serverResponse: { label: 'Streaming Response', description: 'Tokens streaming back' },
+    clientReceive: { label: 'Chain Output', description: 'LangChain processes response' }
   }
 
   const clientFormObject = {
-    type: 'LoginForm',
-    fields: {
-      username: { value: requestData.username, valid: true },
-      password: { value: requestData.password, valid: true }
+    type: 'LLMChain',
+    prompt: {
+      template: requestData.query,
+      inputVariables: [],
+      validate: 'async () => { ... }'
     },
-    validate: 'function() { ... }'
+    llm: {
+      model: requestData.model,
+      temperature: requestData.temperature,
+      maxTokens: 1000
+    }
   }
 
   const serializedData = JSON.stringify({
-    username: requestData.username,
-    password: requestData.password
+    model: requestData.model,
+    messages: [{
+      role: 'user',
+      content: requestData.query
+    }],
+    temperature: requestData.temperature,
+    stream: true
   }, null, 2)
 
   const serverUserObject = {
-    type: 'User',
-    id: 12345,
-    username: requestData.username,
-    passwordHash: '5f4dcc3b5aa765d61d8327deb882cf99',
-    lastLogin: new Date().toISOString(),
-    authenticate: 'function() { ... }'
+    type: 'OpenAICompletionHandler',
+    requestId: 'req_abc123',
+    model: requestData.model,
+    promptTokens: 15,
+    maxCompletionTokens: 1000,
+    streamHandler: 'AsyncGenerator',
+    process: 'async function* () { ... }'
   }
 
   const responseData = {
-    success: true,
-    user: {
-      id: 12345,
-      username: requestData.username,
-      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+    id: 'chatcmpl-abc123',
+    object: 'chat.completion',
+    created: Date.now(),
+    model: requestData.model,
+    choices: [{
+      message: {
+        role: 'assistant',
+        content: 'Machine learning is a subset of AI that enables systems to learn from data...'
+      },
+      finish_reason: 'stop'
+    }],
+    usage: {
+      prompt_tokens: 15,
+      completion_tokens: 127,
+      total_tokens: 142
     }
   }
 
@@ -64,8 +86,8 @@ const NetworkCall = () => {
     await sleep(800)
     
     // Check for validation error simulation
-    if (requestData.username.length < 3) {
-      setValidationError('Username too short!')
+    if (requestData.query.length < 5) {
+      setValidationError('Query too short! Please provide more context.')
       setCurrentStep('idle')
       return
     }
@@ -116,33 +138,48 @@ const NetworkCall = () => {
   return (
     <div className="network-call-container">
       <div className="network-header">
-        <h3>Client/Server Object Communication</h3>
-        <p>See how objects are serialized and transmitted between client and server</p>
+        <h3>LangChain → OpenAI API Communication</h3>
+        <p>See how LLM chains serialize requests and handle streaming responses</p>
       </div>
 
       <div className="network-visualization">
         <div className="client-side">
-          <h4>🖥️ Client (Browser)</h4>
+          <h4>🔗 LangChain Client</h4>
           
           <div className="client-form">
-            <h5>Login Form</h5>
-            <input
-              type="text"
-              placeholder="Username"
-              value={requestData.username}
-              onChange={(e) => setRequestData({...requestData, username: e.target.value})}
+            <h5>LangChain LLM Query</h5>
+            <textarea
+              placeholder="Enter your question..."
+              value={requestData.query}
+              onChange={(e) => setRequestData({...requestData, query: e.target.value})}
+              rows={3}
             />
-            <input
-              type="password"
-              placeholder="Password"
-              value={requestData.password}
-              onChange={(e) => setRequestData({...requestData, password: e.target.value})}
-            />
+            <div className="model-settings">
+              <select 
+                value={requestData.model}
+                onChange={(e) => setRequestData({...requestData, model: e.target.value})}
+              >
+                <option value="gpt-4">GPT-4</option>
+                <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                <option value="claude-3">Claude 3</option>
+              </select>
+              <label>
+                Temperature: {requestData.temperature}
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.1"
+                  value={requestData.temperature}
+                  onChange={(e) => setRequestData({...requestData, temperature: parseFloat(e.target.value)})}
+                />
+              </label>
+            </div>
             <button 
               onClick={runNetworkFlow}
               disabled={currentStep !== 'idle'}
             >
-              {currentStep === 'idle' ? 'Submit Login' : 'Processing...'}
+              {currentStep === 'idle' ? 'Send to LLM' : 'Processing...'}
             </button>
             {validationError && (
               <div className="error-message">{validationError}</div>
@@ -150,7 +187,7 @@ const NetworkCall = () => {
           </div>
 
           <div className={`object-view ${isStepActive('clientValidation') ? 'active' : ''}`}>
-            <h5>Client-Side Form Object</h5>
+            <h5>LangChain LLMChain Object</h5>
             <pre>
               <code>{JSON.stringify(clientFormObject, null, 2)}</code>
             </pre>
@@ -158,7 +195,7 @@ const NetworkCall = () => {
 
           {isStepActive('clientValidation') && (
             <div className="validation-note client">
-              ⚡ Fast client-side validation for immediate feedback
+              ⚡ LangChain validates prompt structure before API call
             </div>
           )}
         </div>
@@ -181,7 +218,7 @@ const NetworkCall = () => {
           </div>
 
           <div className={`api-endpoint ${isStepActive('serverReceive') ? 'active' : ''}`}>
-            <span>POST /api/login</span>
+            <span>POST https://api.openai.com/v1/chat/completions</span>
           </div>
 
           <div className={`network-line ${isStepActive('serverResponse') ? 'active' : ''}`}>
@@ -197,10 +234,10 @@ const NetworkCall = () => {
         </div>
 
         <div className="server-side">
-          <h4>🖥️ Server (Backend)</h4>
+          <h4>🤖 OpenAI API Server</h4>
 
           <div className={`object-view ${isStepActive('serverReceive') ? 'active' : ''}`}>
-            <h5>Server-Side User Object</h5>
+            <h5>OpenAI Request Handler</h5>
             <pre>
               <code>{JSON.stringify(serverUserObject, null, 2)}</code>
             </pre>
@@ -209,20 +246,20 @@ const NetworkCall = () => {
           {serverProcessing && (
             <div className="server-processes">
               <div className={`process ${currentStep === 'serverValidation' ? 'active' : ''}`}>
-                🔐 Validate credentials
+                🔐 Validate API key
               </div>
               <div className={`process ${currentStep === 'serverProcess' ? 'active' : ''}`}>
-                🔑 Generate auth token
+                🧠 Load model weights
               </div>
               <div className={`process ${currentStep === 'serverProcess' ? 'active' : ''}`}>
-                💾 Update last login
+                ⚙️ Generate tokens
               </div>
             </div>
           )}
 
           {isStepActive('serverValidation') && (
             <div className="validation-note server">
-              🛡️ Authoritative server-side validation (never trust the client!)
+              🛡️ Token limit validation & content filtering
             </div>
           )}
         </div>
@@ -245,23 +282,23 @@ const NetworkCall = () => {
       </div>
 
       <div className="key-concepts">
-        <h4>Key Concepts:</h4>
+        <h4>LangChain + LLM API Concepts:</h4>
         <div className="concepts-grid">
           <div className="concept">
-            <h5>🎭 Dual Validation</h5>
-            <p>Client-side for UX, server-side for security</p>
+            <h5>🔗 Chain Abstraction</h5>
+            <p>LangChain wraps complex API calls in simple interfaces</p>
           </div>
           <div className="concept">
-            <h5>📦 Serialization</h5>
-            <p>Objects converted to JSON for transmission</p>
+            <h5>🌊 Streaming Responses</h5>
+            <p>Tokens stream back as they're generated</p>
           </div>
           <div className="concept">
-            <h5>🔒 Security</h5>
-            <p>Never trust client data - always validate server-side</p>
+            <h5>📊 Token Management</h5>
+            <p>Track usage for cost and context limits</p>
           </div>
           <div className="concept">
-            <h5>🏗️ Object Reconstruction</h5>
-            <p>JSON data becomes objects on both ends</p>
+            <h5>🔄 Retry & Error Handling</h5>
+            <p>Automatic retries on rate limits</p>
           </div>
         </div>
       </div>

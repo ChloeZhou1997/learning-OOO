@@ -8,26 +8,34 @@ const CodeGatekeeper = () => {
 
   const classMembers = {
     private: [
-      { name: 'balance', type: 'field', value: 1000, icon: '💰' },
-      { name: 'password', type: 'field', value: '****', icon: '🔑' },
-      { name: 'calculateInterest()', type: 'method', icon: '🔧' }
+      { name: '_parameters', type: 'field', value: 'OrderedDict()', icon: '📦' },
+      { name: '_buffers', type: 'field', value: 'OrderedDict()', icon: '💾' },
+      { name: '_modules', type: 'field', value: 'OrderedDict()', icon: '🔗' },
+      { name: '_load_state_dict_pre_hooks', type: 'field', value: 'OrderedDict()', icon: '🪝' },
+      { name: '_apply(fn)', type: 'method', icon: '🔧' },
+      { name: '_named_members()', type: 'method', icon: '🏷️' }
     ],
     protected: [
-      { name: 'accountType', type: 'field', value: 'SAVINGS', icon: '📋' },
-      { name: 'validateTransaction()', type: 'method', icon: '🛡️' }
+      { name: '_forward_unimplemented()', type: 'method', icon: '⚠️' },
+      { name: '_get_name()', type: 'method', icon: '📛' },
+      { name: '_replicate_for_data_parallel()', type: 'method', icon: '📊' }
     ],
     public: [
-      { name: 'accountNumber', type: 'field', value: 'ACC-789', icon: '🏷️' },
-      { name: 'deposit()', type: 'method', icon: '💵' },
-      { name: 'withdraw()', type: 'method', icon: '💸' },
-      { name: 'getBalance()', type: 'method', icon: '📊' }
+      { name: 'forward(*input)', type: 'method', icon: '➡️' },
+      { name: 'parameters()', type: 'method', icon: '⚙️' },
+      { name: 'named_parameters()', type: 'method', icon: '🏷️' },
+      { name: 'train(mode=True)', type: 'method', icon: '🏃' },
+      { name: 'eval()', type: 'method', icon: '📈' },
+      { name: 'to(device)', type: 'method', icon: '🖥️' },
+      { name: 'register_parameter()', type: 'method', icon: '📝' },
+      { name: 'add_module()', type: 'method', icon: '➕' }
     ]
   }
 
   const contexts = {
-    outside: { name: 'Outside Class', canAccess: ['public'] },
-    subclass: { name: 'Subclass', canAccess: ['public', 'protected'] },
-    inside: { name: 'Inside Class', canAccess: ['public', 'protected', 'private'] }
+    outside: { name: 'User Code', canAccess: ['public'] },
+    subclass: { name: 'Custom Layer (Subclass)', canAccess: ['public', 'protected'] },
+    inside: { name: 'nn.Module Internal', canAccess: ['public', 'protected', 'private'] }
   }
 
   const attemptAccess = (modifier, member) => {
@@ -72,7 +80,8 @@ const CodeGatekeeper = () => {
 
       <div className="class-diagram">
         <div className="class-header">
-          <h3>🏦 BankAccount Class</h3>
+          <h3>🧠 PyTorch nn.Module Class</h3>
+          <p className="class-subtitle">The foundation of every neural network in PyTorch!</p>
         </div>
 
         <div className="class-sections">
@@ -139,6 +148,21 @@ const CodeGatekeeper = () => {
             <span className="modifier-badge public">public</span>
             <span>Accessible from anywhere</span>
           </div>
+        </div>
+        
+        <div className="framework-insight">
+          <h4>🚀 Understanding PyTorch's Design:</h4>
+          <p>
+            This interactive demonstrates the actual access patterns in PyTorch's nn.Module:
+          </p>
+          <ul>
+            <li><strong>Private (_parameters, _buffers):</strong> Core state management that users should never directly modify</li>
+            <li><strong>Protected (_forward_unimplemented):</strong> Methods that subclasses might need but aren't part of the public API</li>
+            <li><strong>Public (forward, parameters, train):</strong> The clean, documented API that users interact with</li>
+          </ul>
+          <p className="challenge-prompt">
+            💡 <strong>Try this:</strong> Click on different members from different contexts to see how PyTorch enforces encapsulation. Notice how user code can only access the public API, while custom layers (subclasses) get additional protected access!
+          </p>
         </div>
       </div>
     </div>

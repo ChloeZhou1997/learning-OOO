@@ -2,6 +2,14 @@ export default {
 id: 'introduction',
 navTitle: 'Introduction',
 title: 'Introduction: The Goal of This Book',
+learningObjectives: [
+'Understand the fundamental difference between procedural and object-oriented paradigms',
+'Recognize object-orientation as a way of thinking and modeling the world',
+'Identify the core principles of good software design: encapsulation, low coupling, high cohesion, and interfaces',
+'Set expectations for making the "paradigm shift" from linear programming to object-oriented thinking',
+'Prepare to analyze problems and design solutions in terms of objects and their interactions',
+'Understand the goal of creating maintainable, flexible, and robust software systems'
+],
 content: `
 <h2>Our Philosophy</h2>
 <p>This guide is designed to fundamentally shift your thinking from a procedural to an object-oriented paradigm. We believe that true mastery comes from understanding concepts, not just memorizing syntax. Our goal is to help you see object-orientation as a way of thinking—a method for modeling the world—rather than just a set of language features or diagramming tools. By building this solid conceptual foundation, you'll be empowered to learn any object-oriented language or framework more effectively.</p>

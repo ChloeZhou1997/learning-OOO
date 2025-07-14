@@ -107,22 +107,26 @@ For example, let's consider the following example.We are creating an Employee cl
 - Child
 
 What do these classes do? Are they optional? How many does an Employee need?
-- Division
-  - This object contains the information relating to the division that the em- ployee works for.
-  - Each employee must work for a division, so the relationship is mandatory.
-  - The employee works for one, and only one, division.
-- JobDescription
-  - This object contains a job description, most likely containing information such as salary grade and salary range.
-  - Each employee must have a job description, so the relationship is mandatory.
-  - The employee can hold various jobs during the tenure at a company. Thus, an employee can have many job descriptions. These descriptions can be kept as a history if an employee changes jobs, or it is possible that an employee might hold two different jobs at one time. For example, a supervisor might take on an employee's responsibilities if the employee quits and a replacement has not yet been hired.
-- Spouse
-  - In this simplistic example, the Spouse class contains only the anniversary date.
-  - An employee can be married or not married. Thus, a spouse is optional.
-  - An employee can have only one spouse.
-- Child
-  - In this simple example, the Child class contains only the string FavoriteToy.
-  - An employee can have children or not have children.
-  - An employee can have no children or an infinite number of children (wow!). You could make a design decision as to the upper limit of the number of chil- dren that the system can handle.
+
+**Division**
+- Contains the information relating to the division that the employee works for
+- **Mandatory relationship**: Each employee must work for a division
+- **Cardinality**: One employee works for one, and only one, division
+
+**JobDescription**
+- Contains a job description, most likely including information such as salary grade and salary range
+- **Mandatory relationship**: Each employee must have a job description
+- **Cardinality**: An employee can have many job descriptions. These descriptions can be kept as a history if an employee changes jobs, or it is possible that an employee might hold two different jobs at one time. For example, a supervisor might take on an employee's responsibilities if the employee quits and a replacement has not yet been hired.
+
+**Spouse**
+- Contains only the anniversary date in this simplistic example
+- **Optional relationship**: An employee can be married or not married
+- **Cardinality**: An employee can have only one spouse
+
+**Child**
+- Contains only the string FavoriteToy in this simple example
+- **Optional relationship**: An employee can have children or not have children
+- **Cardinality**: An employee can have no children or an infinite number of children (wow!). You could make a design decision as to the upper limit of the number of children that the system can handle.
 
 To sum up, Table 9.1 represents the cardinality of the associations of the classes we just considered.
 

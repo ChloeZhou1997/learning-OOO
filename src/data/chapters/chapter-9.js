@@ -1,4 +1,4 @@
-import CompositionExplorer from '../../components/interactive/CompositionExplorer';
+import ObjectAssemblyLine from '../../components/interactive/ObjectAssemblyLine';
 
 export default {
 id: 'chapter-9',
@@ -79,35 +79,35 @@ content: `
 <h2>4. Cardinality in Relationships</h2>
 <p>Cardinality defines how many objects participate in a relationship:</p>
 <ul>
-<li><strong>One-to-One:</strong> An employee has one desk</li>
-<li><strong>One-to-Many:</strong> A manager has many employees</li>
-<li><strong>Many-to-Many:</strong> Students have many courses, courses have many students</li>
+<li><strong>One-to-One:</strong> A window has one title bar</li>
+<li><strong>One-to-Many:</strong> A container has many components</li>
+<li><strong>Many-to-Many:</strong> Plugins have many hooks, hooks have many plugins</li>
 </ul>
 <p>Cardinality also specifies whether relationships are optional or mandatory:</p>
 <ul>
-<li><strong>0..1:</strong> Optional, at most one (employee may have 0 or 1 spouse)</li>
-<li><strong>1..1:</strong> Mandatory, exactly one (employee must have 1 division)</li>
-<li><strong>0..n:</strong> Optional, unlimited (employee may have 0 to many children)</li>
-<li><strong>1..n:</strong> Mandatory, at least one (department must have at least 1 employee)</li>
+<li><strong>0..1:</strong> Optional, at most one (shape may have 0 or 1 border)</li>
+<li><strong>1..1:</strong> Mandatory, exactly one (button must have 1 label)</li>
+<li><strong>0..n:</strong> Optional, unlimited (container may have 0 to many components)</li>
+<li><strong>1..n:</strong> Mandatory, at least one (composite must have at least 1 child)</li>
 </ul>
 
 <h2>5. Implementing Multiple Associations</h2>
 <p>When an object can have multiple associations of the same type, use collections:</p>
-<pre><code>public class Employee extends Person {
-    private Spouse spouse;           // 0..1 relationship
-    private List<Child> children;    // 0..n relationship
-    private Division division;       // 1..1 relationship
-    private List<JobDescription> jobDescriptions; // 1..n relationship
+<pre><code>public class Container extends Component {
+    private Border border;           // 0..1 relationship
+    private List<Component> children;    // 0..n relationship
+    private Layout layout;       // 1..1 relationship
+    private List<EventListener> listeners; // 1..n relationship
     
-    public void addChild(Child child) {
+    public void addComponent(Component child) {
         if (children == null) {
             children = new ArrayList<>();
         }
         children.add(child);
     }
     
-    public boolean hasSpouse() {
-        return spouse != null;
+    public boolean hasBorder() {
+        return border != null;
     }
 }</code></pre>
 
@@ -133,7 +133,7 @@ content: `
 interactive: {
 title: 'Composition Explorer',
 description: 'An interactive diagram where you can toggle between aggregation and association views of a system, showing how the same objects relate differently.',
-component: CompositionExplorer
+component: ObjectAssemblyLine
 },
 quiz: {
 title: 'Chapter 9 Quiz',
@@ -144,8 +144,8 @@ questions: [
 { type: 'mcq', question: 'Which is an example of association rather than aggregation?', options: ['Car has an engine', 'TV has circuits', 'Computer has a monitor', 'House has rooms'], answerIndex: 2 },
 { type: 'fill-in', question: 'The type of composition where you see both the whole and the parts is called ________.', answer: 'association' },
 { type: 'fill-in', question: 'The notation 1..1 indicates a ________ relationship with exactly one object.', answer: 'mandatory' },
-{ type: 'fill-in', question: 'When an Employee can have zero or one Spouse, the cardinality is written as ________.', answer: '0..1' },
-{ type: 'coding-challenge', question: 'Design an Employee class that has the following relationships:\n- Mandatory: one Division (1..1)\n- Optional: one Spouse (0..1)\n- Multiple: zero or more Children (0..n)\n- Multiple: one or more JobDescriptions (1..n)', modelAnswer: 'public class Employee extends Person {\n    private Division division;              // 1..1 - mandatory\n    private Spouse spouse;                  // 0..1 - optional\n    private List<Child> children;           // 0..n - optional, multiple\n    private List<JobDescription> jobDescriptions; // 1..n - mandatory, multiple\n    \n    public Employee(Division division, JobDescription initialJob) {\n        // Mandatory relationships must be set\n        if (division == null || initialJob == null) {\n            throw new IllegalArgumentException("Division and initial job are required");\n        }\n        this.division = division;\n        this.jobDescriptions = new ArrayList<>();\n        this.jobDescriptions.add(initialJob);\n        this.children = new ArrayList<>();\n    }\n    \n    public void setSpouse(Spouse spouse) {\n        this.spouse = spouse;\n    }\n    \n    public void addChild(Child child) {\n        children.add(child);\n    }\n    \n    public void addJobDescription(JobDescription job) {\n        jobDescriptions.add(job);\n    }\n    \n    public boolean hasSpouse() {\n        return spouse != null;\n    }\n    \n    public int getNumberOfChildren() {\n        return children.size();\n    }\n}' }
+{ type: 'fill-in', question: 'When a Shape can have zero or one Border, the cardinality is written as ________.', answer: '0..1' },
+{ type: 'coding-challenge', question: 'Design a Window class that has the following relationships:\n- Mandatory: one Layout (1..1)\n- Optional: one MenuBar (0..1)\n- Multiple: zero or more Components (0..n)\n- Multiple: one or more EventListeners (1..n)', modelAnswer: 'public class Window extends Container {\n    private Layout layout;                    // 1..1 - mandatory\n    private MenuBar menuBar;                  // 0..1 - optional\n    private List<Component> components;       // 0..n - optional, multiple\n    private List<EventListener> listeners;    // 1..n - mandatory, multiple\n    \n    public Window(Layout layout, EventListener initialListener) {\n        // Mandatory relationships must be set\n        if (layout == null || initialListener == null) {\n            throw new IllegalArgumentException("Layout and initial listener are required");\n        }\n        this.layout = layout;\n        this.listeners = new ArrayList<>();\n        this.listeners.add(initialListener);\n        this.components = new ArrayList<>();\n    }\n    \n    public void setMenuBar(MenuBar menuBar) {\n        this.menuBar = menuBar;\n    }\n    \n    public void addComponent(Component component) {\n        components.add(component);\n        layout.layoutComponent(component);\n    }\n    \n    public void addEventListener(EventListener listener) {\n        listeners.add(listener);\n    }\n    \n    public boolean hasMenuBar() {\n        return menuBar != null;\n    }\n    \n    public int getComponentCount() {\n        return components.size();\n    }\n}' }
 ]
 }
 };

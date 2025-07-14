@@ -6,6 +6,15 @@ export default {
 id: 'chapter-1',
 navTitle: '1. Intro to OO Concepts',
 title: 'Chapter 1: Introduction to Object-Oriented Concepts',
+learningObjectives: [
+'Understand the fundamental difference between procedural and object-oriented programming paradigms',
+'Define what objects and classes are, and explain their relationship to each other',
+'Identify and explain the four pillars of object-orientation: encapsulation, inheritance, polymorphism, and composition',
+'Distinguish between attributes (data) and behaviors (methods) in object-oriented design',
+'Understand the concepts of data hiding and interfaces in encapsulation',
+'Differentiate between "is-a" relationships (inheritance) and "has-a" relationships (composition)',
+'Explain how polymorphism enables different objects to respond to the same message differently'
+],
 content: `
 <p>Although many people find this bit of information surprising, object-oriented (OO) software development has been around since the early 1960s. Objects are now used throughout the software development industry. It is no secret that the software industry can be slow-moving at times. It is also true that, when systems are working fine, there has to be a compelling reason to replace them. This has somewhat slowed the propagation of OO systems.</p>
 
@@ -38,15 +47,15 @@ content: `
 
 <h2>What Exactly Is an Object?</h2>
 
-<p>Objects are the building blocks of an OO program. A program that uses OO technology is basically a collection of objects. To illustrate, let's consider that a corporate system contains objects that represent employees of that company. Each of these objects is made up of the data and behavior described in the following sections.</p>
+<p>Objects are the building blocks of an OO program. A program that uses OO technology is basically a collection of objects. To illustrate, let's consider a graphics system that contains objects representing various shapes. Each of these objects is made up of the data and behavior described in the following sections.</p>
 
 <h3>Object Data</h3>
 
-<p>The data stored within an object represents the state of the object. In OO programming terminology, this data is called <strong>attributes</strong>. In our example, employee attributes could be Social Security numbers, date of birth, gender, phone number, and so on. The attributes contain the information that differentiates between the various objects, in this case the employees.</p>
+<p>The data stored within an object represents the state of the object. In OO programming terminology, this data is called <strong>attributes</strong>. In our example, shape attributes could be position (x, y coordinates), color, size, rotation angle, and so on. The attributes contain the information that differentiates between the various objects, in this case the different shapes on screen.</p>
 
 <h3>Object Behaviors</h3>
 
-<p>The behavior of an object is what the object can do. In procedural languages the behavior is defined by procedures, functions, and subroutines. In OO programming terminology these behaviors are contained in <strong>methods</strong>, and you invoke a method by sending a message to it. In our employee example, consider that one of the behaviors required of an employee object is to set and return the values of the various attributes. Thus, each attribute would have corresponding methods, such as <code>setGender()</code> and <code>getGender()</code>. In this case, when another object needs this information, it can send a message to an employee object and ask it what its gender is.</p>
+<p>The behavior of an object is what the object can do. In procedural languages the behavior is defined by procedures, functions, and subroutines. In OO programming terminology these behaviors are contained in <strong>methods</strong>, and you invoke a method by sending a message to it. In our shape example, consider that one of the behaviors required of a shape object is to set and return the values of the various attributes. Thus, each attribute would have corresponding methods, such as <code>setColor()</code> and <code>getColor()</code>. Other behaviors might include <code>draw()</code>, <code>move()</code>, <code>rotate()</code>, and <code>scale()</code>. In this case, when another object needs this information, it can send a message to a shape object and ask it to draw itself or report its position.</p>
 
 <div class="info-box">
 <h4>Getters and Setters</h4>
@@ -74,7 +83,7 @@ float y;</code></pre>
 
 <p>In this example, the names themselves make it obvious that <code>myClass</code> is the class and <code>myObject</code> is the object.</p>
 
-<p>For example, here is a definition of a Person class:</p>
+<p>For example, here is a simple definition of a Person class:</p>
 <pre><code>public class Person{
     //Attributes
     private String name;
@@ -95,6 +104,11 @@ float y;</code></pre>
     }
 }</code></pre>
 
+<div class="info-box">
+<h4>From Simple to Complex</h4>
+<p>While this Person class is a toy example for learning, the same principles scale to production frameworks. PyTorch's <code>nn.Module</code> manages neural network parameters, TensorFlow's <code>Layer</code> handles tensor operations, and LangChain's <code>Chain</code> orchestrates AI workflows - all using these same OO foundations. Throughout this book, we'll explore how these simple concepts enable building sophisticated frameworks used by millions.</p>
+</div>
+
 <h3>Attributes</h3>
 
 <p>As you already saw, the data of a class is represented by attributes. Each class must define the attributes that will store the state of each object instantiated from that class. In the Person class example in the previous section, the Person class defines attributes for <code>name</code> and <code>address</code>.</p>
@@ -112,15 +126,16 @@ float y;</code></pre>
 
 <p>Messages are the communication mechanism between objects. For example, when Object A invokes a method of Object B, Object A is sending a message to Object B. Object B's response is defined by its return value. Only the public methods, not the private methods, of an object can be invoked by another object. The following code illustrates this concept:</p>
 
-<pre><code>public class Payroll{
-    String name;
-    Person p = new Person();
-    p.setName("Joe");
+<pre><code>public class DrawingCanvas{
+    Shape shape = new Circle();
+    shape.setColor("red");
+    shape.setPosition(100, 200);
     ... code
-    String name = p.getName();
+    String color = shape.getColor();
+    shape.draw();
 }</code></pre>
 
-<p>In this example (assuming that a Payroll object is instantiated), the Payroll object is sending a message to a Person object, with the purpose of retrieving the name via the <code>getName</code> method.</p>
+<p>In this example (assuming that a DrawingCanvas object is instantiated), the DrawingCanvas object is sending messages to a Shape object, setting its properties and instructing it to draw itself via the <code>draw</code> method.</p>
 
 <h2>The Four Pillars of Object-Orientation</h2>
 
@@ -152,7 +167,7 @@ float y;</code></pre>
 
 <h3>Implementations</h3>
 
-<p>Only the public attributes and methods are considered the interface. The user should not see any part of the implementation—interacting with an object solely through class interfaces. In the previous example, for instance the Employee class, only the attributes were hidden. In many cases, there will be methods that also should be hidden and thus not part of the interface.</p>
+<p>Only the public attributes and methods are considered the interface. The user should not see any part of the implementation—interacting with an object solely through class interfaces. In the previous example, for instance the Shape class, only the attributes were hidden. In many cases, there will be methods that also should be hidden and thus not part of the interface. For example, internal calculation methods for determining bounding boxes or collision detection might be private.</p>
 
 <h3>A Real-World Example of the Interface/Implementation Paradigm</h3>
 

@@ -20,6 +20,7 @@
   grid-column: 2 / 3;
   background-color: #FFFFFF;
   overflow-y: auto;
+  overflow-x: visible;
 }
 
 .sidebar-header {
@@ -307,6 +308,7 @@
   max-width: 64rem;
   margin: 0 auto;
   padding: 2rem 3rem;
+  overflow-x: visible;
 }
 
 .content-header {
@@ -511,6 +513,24 @@ pre code {
   margin-top: 1rem;
 }
 
+/* Quiz container - remove all list styling */
+.quiz-container ul,
+.quiz-container ol {
+  list-style: none !important;
+  margin: 0;
+  padding: 0;
+}
+
+.quiz-container li {
+  list-style: none !important;
+  margin: 0;
+  padding: 0;
+}
+
+.quiz-container li::before {
+  content: none !important;
+}
+
 .quiz-title {
   font-size: 1.125rem;
   font-family: 'Inter', sans-serif;
@@ -665,11 +685,13 @@ pre code {
 
 /* Interactive Components - Minimal */
 .interactive-container {
-  margin: 1.5rem 0;
-  padding: 1.5rem;
+  width: calc(100% + 16rem);
+  margin: 1.5rem -8rem;
+  padding: 2rem 3rem;
   background-color: #fafafa;
   border-radius: 0.375rem;
   border: 1px solid #e5e7eb;
+  position: relative;
 }
 
 .interactive-title {
@@ -689,8 +711,9 @@ pre code {
 .interactive-component {
   background-color: white;
   border-radius: 0.25rem;
-  padding: 1rem;
+  padding: 2rem;
   border: 1px solid #e5e7eb;
+  overflow-x: auto;
 }
 
 /* Learning Objectives Card - Minimal */
@@ -866,4 +889,102 @@ pre code {
   .concepts-grid {
     gap: 0.375rem;
   }
+  
+  .interactive-container {
+    width: 100%;
+    margin: 1.5rem 0;
+  }
+}
+
+@media (max-width: 1200px) {
+  .interactive-container {
+    width: calc(100% + 8rem);
+    margin: 1.5rem -4rem;
+    padding: 2rem;
+  }
+}
+
+/* List styling for main content area */
+.main-content ul {
+  list-style-type: disc;
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.main-content ol {
+  list-style-type: decimal;
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.main-content li {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+.main-content ul ul {
+  list-style-type: circle;
+  margin: 0.5rem 0;
+}
+
+.main-content ul ul ul {
+  list-style-type: square;
+}
+
+.main-content ol ol {
+  list-style-type: lower-alpha;
+  margin: 0.5rem 0;
+}
+
+.main-content ol ol ol {
+  list-style-type: lower-roman;
+}
+
+/* Ensure proper spacing for nested lists */
+.main-content li > ul,
+.main-content li > ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Also apply list styling to chapter sections */
+.chapter-section ul {
+  list-style-type: disc;
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.chapter-section ol {
+  list-style-type: decimal;
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.chapter-section li {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+.chapter-section ul ul {
+  list-style-type: circle;
+  margin: 0.5rem 0;
+}
+
+.chapter-section ul ul ul {
+  list-style-type: square;
+}
+
+.chapter-section ol ol {
+  list-style-type: lower-alpha;
+  margin: 0.5rem 0;
+}
+
+.chapter-section ol ol ol {
+  list-style-type: lower-roman;
+}
+
+.chapter-section li > ul,
+.chapter-section li > ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }

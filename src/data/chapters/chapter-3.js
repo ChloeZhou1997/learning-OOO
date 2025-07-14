@@ -17,9 +17,9 @@ content: `
 <h2>1. The Constructor: An Object's Birth Certificate</h2>
 <p>In Chapter 1, we learned that a class is a blueprint and an object is an instance created from that blueprint. But how, exactly, is an object "born"? What ensures it is created in a valid and usable state? This is the role of the <strong>constructor</strong>.</p>
 <p>A constructor is a special method within a class that is automatically called when a new object of that class is created (a process called <em>instantiation</em>). Its primary responsibility is to initialize the object's attributes, ensuring the object starts its life in a consistent and predictable state.</p>
-<p>Consider a <code>Book</code> class. A book object would be meaningless without a title or an author. A constructor enforces this rule.</p>
-<p>In OO languages, constructors are methods that share the same name as the class and have no return type. For example, a constructor for the Cabbie class would look like this:</p>
-<pre><code>public Cabbie(){
+<p>Consider a <code>Shape</code> class. A shape object would be meaningless without dimensions or position. A constructor enforces this rule.</p>
+<p>In OO languages, constructors are methods that share the same name as the class and have no return type. For example, a constructor for the Circle class would look like this:</p>
+<pre><code>public Circle(){
     /* code to construct the object */
 }</code></pre>
 <p>The compiler will recognize that the method name is identical to the class name and consider the method a constructor.</p>
@@ -27,26 +27,29 @@ content: `
 
 <h3>When Is a Constructor Called?</h3>
 <p>When a new object is created, one of the first things that happens is that the constructor is called. Check out the following code:</p>
-<pre><code>Cabbie myCabbie = new Cabbie();</code></pre>
-<p>The new keyword creates a new instance of the Cabbie class, thus allocating the required memory. Then the constructor itself is called, passing the arguments in the parameter list.</p>
+<pre><code>Circle myCircle = new Circle();</code></pre>
+<p>The new keyword creates a new instance of the Circle class, thus allocating the required memory. Then the constructor itself is called, passing the arguments in the parameter list.</p>
 
 <h3>The Default Constructor</h3>
 <p>If you write a class and do not include a constructor, the class will still compile, and you can still use it. If the class provides no explicit constructor, a default constructor will be provided. It is important to understand that at least one constructor always exists, regardless of whether you write a constructor yourself.</p>
-<p>Besides the creation of the object itself, the only action that a default constructor takes is to call the constructor of its superclass. If you do not provide a constructor for the Cabbie class, the following default constructor is inserted:</p>
-<pre><code>public Cabbie(){
+<p>Besides the creation of the object itself, the only action that a default constructor takes is to call the constructor of its superclass. If you do not provide a constructor for the Circle class, the following default constructor is inserted:</p>
+<pre><code>public Circle(){
     super();
 }</code></pre>
 <blockquote><strong>Providing a Constructor:</strong> The rule of thumb is that you should always provide a constructor, even if you do not plan on doing anything inside it. It is good programming practice to always include at least one constructor in a class.</blockquote>
 
 <h3>Using Multiple Constructors</h3>
-<p>In many cases, an object can be constructed in more than one way. To accommodate this situation, you need to provide more than one constructor. For example, let's consider the Count class:</p>
-<pre><code>public class Count {
-    int count;
-    public Count(){
-        count = 0;
+<p>In many cases, an object can be constructed in more than one way. To accommodate this situation, you need to provide more than one constructor. For example, let's consider the Rectangle class:</p>
+<pre><code>public class Rectangle {
+    double width;
+    double height;
+    public Rectangle(){
+        width = 1.0;
+        height = 1.0;
     }
-    public Count (int number){
-        count = number;
+    public Rectangle (double w, double h){
+        width = w;
+        height = h;
     }
 }</code></pre>
 <p>This is called overloading a method. Overloading allows a programmer to use the same method name over and over, as long as the signature of the method is different each time. The signature consists of the method name and a parameter list.</p>
@@ -62,8 +65,8 @@ content: `
 <h2>2. Composition vs. Inheritance: Building Relationships</h2>
 <p>Two primary ways to build classes from other classes are inheritance and composition. Making the right choice between them is a critical architectural decision.</p>
 <ul>
-<li><strong>Inheritance (is-a):</strong> Use when one class is a specialized version of another. A <code>Manager</code> is an <code>Employee</code>.</li>
-<li><strong>Composition (has-a):</strong> Use when one class contains or uses another. A <code>Car</code> has an <code>Engine</code>.</li>
+<li><strong>Inheritance (is-a):</strong> Use when one class is a specialized version of another. A <code>Circle</code> is a <code>Shape</code>.</li>
+<li><strong>Composition (has-a):</strong> Use when one class contains or uses another. A <code>Window</code> has a <code>Button</code>.</li>
 </ul>
 <p>The principle "favor composition over inheritance" exists because composition provides more flexibility—you can change the relationships at runtime.</p>
 
@@ -178,11 +181,11 @@ quiz: {
 title: 'Chapter 3 Quiz',
 questions: [
 { type: 'mcq', question: 'Which statement best describes the purpose of a constructor?', options: ['To destroy objects when they are no longer needed', 'To compare two objects for equality', 'To initialize an object into a valid state when it is created', 'To copy the contents of one object to another'], answerIndex: 2 },
-{ type: 'mcq', question: 'You are designing a system where a Car class needs an Engine. Which relationship should you use?', options: ['Inheritance (Car extends Engine)', 'Composition (Car has an Engine)', 'Multiple inheritance from both Vehicle and Engine', 'Make Engine a subclass of Car'], answerIndex: 1 },
+{ type: 'mcq', question: 'You are designing a GUI system where a Window class needs Button components. Which relationship should you use?', options: ['Inheritance (Window extends Button)', 'Composition (Window has Buttons)', 'Multiple inheritance from both Container and Button', 'Make Button a subclass of Window'], answerIndex: 1 },
 { type: 'mcq', question: 'What is the main advantage of an interface over an abstract class?', options: ['Interfaces can contain implementation code', 'A class can implement multiple interfaces but extend only one class', 'Interfaces are faster at runtime', 'Interfaces can have private methods'], answerIndex: 1 },
 { type: 'fill-in', question: 'The design principle "favor ________ over inheritance" promotes flexibility by allowing relationships to change at runtime.', answer: 'composition' },
 { type: 'fill-in', question: 'The ________ Problem is a common issue in languages that support multiple inheritance, where ambiguity arises from inheriting from multiple classes with a common ancestor.', answer: 'Diamond' },
-{ type: 'coding-challenge', question: 'Design a simple media player system. You have a MediaFile base class and need to create AudioFile and VideoFile classes. Some media files can have subtitles. How would you design this using proper OO principles? Write the class declarations.', modelAnswer: 'Use inheritance for AudioFile and VideoFile (they ARE MediaFiles), and composition for subtitles:\\n\\nabstract class MediaFile {\\n    protected String filename;\\n    protected int duration;\\n    abstract void play();\\n}\\n\\nclass AudioFile extends MediaFile {\\n    private int bitrate;\\n    void play() { /* audio playback */ }\\n}\\n\\nclass VideoFile extends MediaFile {\\n    private int resolution;\\n    private Subtitle subtitle; // Composition\\n    void play() { /* video playback */ }\\n}\\n\\nclass Subtitle {\\n    private String language;\\n    private String content;\\n}' }
+{ type: 'coding-challenge', question: 'Design a simple shape hierarchy. You have a Shape base class and need to create Circle and Rectangle classes. Some shapes can have decorative borders. How would you design this using proper OO principles? Write the class declarations.', modelAnswer: 'Use inheritance for Circle and Rectangle (they ARE Shapes), and composition for borders:\\n\\nabstract class Shape {\\n    protected double x, y;\\n    abstract double area();\\n    abstract void draw();\\n}\\n\\nclass Circle extends Shape {\\n    private double radius;\\n    private Border border; // Composition\\n    double area() { return Math.PI * radius * radius; }\\n    void draw() { /* draw circle */ }\\n}\\n\\nclass Rectangle extends Shape {\\n    private double width, height;\\n    private Border border; // Composition\\n    double area() { return width * height; }\\n    void draw() { /* draw rectangle */ }\\n}\\n\\nclass Border {\\n    private String style;\\n    private int thickness;\\n}' }
 ]
 }
 };

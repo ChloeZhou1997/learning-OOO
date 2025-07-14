@@ -58,17 +58,17 @@ content: `
 <p>ORMs bridge the gap between objects and databases:</p>
 <pre><code>// Object definition
 @Entity
-public class Customer {
+public class GameObject {
 @Id
 private Long id;
 private String name;
 @OneToMany
-private List<Order> orders;
+private List<Component> components;
 }
 
 // ORM handles the SQL
-Customer customer = repository.findById(123);
-customer.getOrders(); // Lazy loading</code></pre>
+GameObject gameObject = repository.findById(123);
+gameObject.getComponents(); // Lazy loading</code></pre>
 
 <h2>4. Serialization Considerations</h2>
 <ul>

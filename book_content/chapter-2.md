@@ -60,15 +60,16 @@ Recall that in the toaster example, although the interface is always the electri
 ## An Interface/Implementation Example
 
 Let's create a simple (if not very functional) database reader class. We'll write some Java code that will retrieve records from the database. As we've discussed, knowing your end users is always the most important issue when doing any kind of design.You should do some analysis of the situation and conduct interviews with end users, and then list the re- quirements for the project. The following are some requirements we might want to use for the database reader:
-- We must be able to open a connection to the database.
-- We must be able to close the connection to the database.
-- We must be able to position the cursor on the first record in the database.
-- We must be able to position the cursor on the last record in the database.
-- We must be able to find the number of records in the database.
-- We must be able to determine whether there are more records in the database (that is, if we are at the end).
-- We must be able to position the cursor at a specific record by supplying the key.
-- We must be able to retrieve a record by supplying a key.
-- We must be able to get the next record, based on the position of the cursor.
+
+1. We must be able to open a connection to the database.
+2. We must be able to close the connection to the database.
+3. We must be able to position the cursor on the first record in the database.
+4. We must be able to position the cursor on the last record in the database.
+5. We must be able to find the number of records in the database.
+6. We must be able to determine whether there are more records in the database (that is, if we are at the end).
+7. We must be able to position the cursor at a specific record by supplying the key.
+8. We must be able to retrieve a record by supplying a key.
+9. We must be able to get the next record, based on the position of the cursor.
 
 With these requirements in mind, we can make an initial attempt to design the database reader class by creating possible interfaces for these end users.
 
