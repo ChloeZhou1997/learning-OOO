@@ -3,6 +3,7 @@ import Quiz from './Quiz'
 import LearningObjectiveCard from './LearningObjectiveCard'
 import KeyConceptsSection from './KeyConceptsSection'
 import ContentWithInteractives from './ContentWithInteractives'
+import BookmarkButton from './BookmarkButton'
 import { extractKeyConceptsFromChapter } from '../utils/extractKeyConcepts'
 
 const Section = ({ section, prerequisiteQuiz }) => {
@@ -54,14 +55,20 @@ const Section = ({ section, prerequisiteQuiz }) => {
 
   return (
     <section id={section.id} className="chapter-section">
-      <h2>{section.title}</h2>
+      <div className="section-header">
+        <h2>{section.title}</h2>
+        <BookmarkButton 
+          chapterId={section.id}
+          title={section.title}
+        />
+      </div>
       
       {section.id === 'prerequisite-check' ? (
         <>
           <p>Before we dive in, let's ensure you have the foundational knowledge needed to get the most out of this book. This short quiz will test your understanding of basic programming concepts.</p>
           {prerequisiteQuiz && (
             <div className="quiz-container">
-              <Quiz quiz={prerequisiteQuiz} />
+              <Quiz quiz={prerequisiteQuiz} chapterId={section.id} />
             </div>
           )}
         </>
@@ -76,6 +83,7 @@ const Section = ({ section, prerequisiteQuiz }) => {
           <ContentWithInteractives 
             content={processedContent || section.content} 
             additionalInteractives={section.additionalInteractives}
+            chapterId={section.id}
           />
         </>
       )}
@@ -86,7 +94,7 @@ const Section = ({ section, prerequisiteQuiz }) => {
           <p className="interactive-description">{section.interactive.description}</p>
           {section.interactive.component && (
             <div className="interactive-component">
-              <section.interactive.component />
+              <section.interactive.component chapterId={section.id} />
             </div>
           )}
         </div>
@@ -94,7 +102,7 @@ const Section = ({ section, prerequisiteQuiz }) => {
 
       {section.quiz && (
         <div className="quiz-container">
-          <Quiz quiz={section.quiz} />
+          <Quiz quiz={section.quiz} chapterId={section.id} />
         </div>
       )}
     </section>

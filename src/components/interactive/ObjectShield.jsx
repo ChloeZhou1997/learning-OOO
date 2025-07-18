@@ -1,12 +1,36 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useAnalytics } from '../../hooks/useAnalytics'
 import './ObjectShield.css'
 
-const ObjectShield = () => {
+/**
+ * ObjectShield Interactive Component
+ * 
+ * Demonstrates the concept of encapsulation in object-oriented programming by visualizing
+ * how objects protect their internal state from direct external access.
+ * 
+ * @component
+ * @example
+ * return (
+ *   <ObjectShield />
+ * )
+ * 
+ * Educational concepts covered:
+ * - Data hiding and encapsulation
+ * - Public vs private access modifiers
+ * - Controlled access through public methods
+ * - Real-world example using React component internals
+ */
+const ObjectShield = ({ chapterId = 'unknown' }) => {
   const [selectedAccess, setSelectedAccess] = useState('public')
   const [attempts, setAttempts] = useState([])
   const [shieldActive, setShieldActive] = useState(true)
+  const { trackComponentInteraction, trackComponentTime } = useAnalytics()
+  const [startTime] = useState(Date.now())
 
-  // React Component Internal State (Private)
+  /**
+   * Simulated private state of a React component
+   * These represent internal implementation details that should not be directly accessible
+   */
   const privateState = {
     _state: 'Object { count: 42, user: "John" }',
     _props: 'Object { theme: "dark", size: "large" }',
@@ -14,7 +38,10 @@ const ObjectShield = () => {
     _fiber: 'FiberNode<Component>'
   }
 
-  // React Component Public API
+  /**
+   * Public API methods that provide controlled access to the component
+   * These are the only approved ways to interact with the component's internals
+   */
   const publicMethods = {
     setState: (updates) => `State updated with ${JSON.stringify(updates)}`,
     forceUpdate: () => 'Component re-rendered',
@@ -22,6 +49,22 @@ const ObjectShield = () => {
     componentDidMount: () => 'Lifecycle: Component mounted'
   }
 
+  // Track component usage on mount
+  useEffect(() => {
+    trackComponentInteraction('ObjectShield', chapterId, 'started');
+    
+    // Track time spent when component unmounts
+    return () => {
+      const timeSpent = Math.round((Date.now() - startTime) / 1000); // seconds
+      trackComponentTime('ObjectShield', chapterId, timeSpent);
+    };
+  }, [chapterId, startTime, trackComponentInteraction, trackComponentTime]);
+
+  /**
+   * Handles access attempts to the object's data
+   * @param {string} type - Type of access attempt ('direct' or 'method')
+   * @param {string} target - The property or method being accessed
+   */
   const handleAccess = (type, target) => {
     const timestamp = new Date().toLocaleTimeString()
     let result = {
@@ -41,6 +84,13 @@ const ObjectShield = () => {
     }
 
     setAttempts([result, ...attempts.slice(0, 4)])
+    
+    // Track interaction
+    trackComponentInteraction('ObjectShield', chapterId, 'interaction', {
+      accessType: type,
+      target: target,
+      success: result.success
+    })
   }
 
   return (

@@ -13,6 +13,9 @@ function App() {
 
   const allSectionsData = [
     { id: 'prerequisite-check', navTitle: 'Prerequisite Check', title: 'Prerequisite Check' },
+    { id: 'progress', navTitle: 'Progress Dashboard', title: 'Progress Dashboard' },
+    { id: 'analytics', navTitle: 'Learning Analytics', title: 'Learning Analytics' },
+    { id: 'cheatsheet', navTitle: 'OO Design Cheatsheet', title: 'OO Design Cheatsheet' },
     ...courseContent
   ]
 

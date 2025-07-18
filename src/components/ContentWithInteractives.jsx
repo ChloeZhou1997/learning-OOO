@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
 
-const ContentWithInteractives = ({ content, additionalInteractives }) => {
+const ContentWithInteractives = ({ content, additionalInteractives, chapterId }) => {
   const contentRef = useRef(null);
   const rootsRef = useRef({});
 
@@ -42,7 +42,7 @@ const ContentWithInteractives = ({ content, additionalInteractives }) => {
           rootsRef.current[componentName] = root;
           
           const Component = interactive.component;
-          root.render(<Component />);
+          root.render(<Component chapterId={chapterId} />);
         }
       });
     }, 0);

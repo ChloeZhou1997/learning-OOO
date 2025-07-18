@@ -1,14 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useAnalytics } from '../../hooks/useAnalytics'
 import './UMLBlueprintDrafter.css'
 
-const UMLBlueprintDrafter = () => {
+const UMLBlueprintDrafter = ({ chapterId = 'unknown' }) => {
   const [classes, setClasses] = useState([])
   const [selectedClass, setSelectedClass] = useState(null)
   const [connections, setConnections] = useState([])
   const [isAddingClass, setIsAddingClass] = useState(false)
   const [connectionMode, setConnectionMode] = useState(null)
   const [connectionStart, setConnectionStart] = useState(null)
-  const [selectedTemplate, setSelectedTemplate] = useState('pytorch')
+  const [selectedTemplate, setSelectedTemplate] = useState(null)
+  
+  const { trackComponentInteraction } = useAnalytics()
+  
+  // Track component mount
+  useEffect(() => {
+    trackComponentInteraction('UMLBlueprintDrafter', 'opened', { chapterId })
+  }, [trackComponentInteraction, chapterId])
+  
+  // Load default template on mount
+  useEffect(() => {
+    if (!selectedTemplate && frameworkTemplates['pytorch']) {
+      const template = frameworkTemplates['pytorch']
+      setClasses(template.classes)
+      setConnections(template.connections)
+      setSelectedTemplate('pytorch')
+    }
+  }, [])
 
   const relationshipTypes = {
     inheritance: { symbol: '▷', label: 'Inheritance (extends)', style: 'solid' },
@@ -244,6 +262,7 @@ const UMLBlueprintDrafter = () => {
     setConnections(template.connections)
     setSelectedTemplate(templateKey)
     setSelectedClass(null)
+    trackComponentInteraction('UMLBlueprintDrafter', 'loadedTemplate', { template: templateKey })
   }
 
   const addClass = (name) => {
@@ -258,6 +277,7 @@ const UMLBlueprintDrafter = () => {
     }
     setClasses([...classes, newClass])
     setIsAddingClass(false)
+    trackComponentInteraction('UMLBlueprintDrafter', 'addClass', { className: newClass.name })
   }
 
   const updateClass = (classId, updates) => {
@@ -321,6 +341,7 @@ const UMLBlueprintDrafter = () => {
       setConnections([...connections, newConnection])
       setConnectionMode(null)
       setConnectionStart(null)
+      trackComponentInteraction('UMLBlueprintDrafter', 'addConnection', { type: connectionMode })
     } else {
       setSelectedClass(classId)
     }
@@ -355,6 +376,12 @@ const UMLBlueprintDrafter = () => {
         const relationship = relationshipTypes[conn.type]
         uml += `${fromClass.name} ${relationship.symbol} ${toClass.name} // ${relationship.label}\n`
       }
+    })
+    
+    trackComponentInteraction('UMLBlueprintDrafter', 'exportUML', { 
+      classCount: classes.length, 
+      connectionCount: connections.length,
+      completed: true 
     })
     
     return uml
@@ -504,9 +531,11 @@ const UMLBlueprintDrafter = () => {
                       {method.visibility === 'private' ? '-' : 
                        method.visibility === 'protected' ? '#' : '+'}
                     </span>
-                    {method.abstract && <em>}
-                    {method.name}(): {method.returnType}
-                    {method.abstract && </em>}
+                    {method.abstract ? (
+                      <em>{method.name}(): {method.returnType}</em>
+                    ) : (
+                      `${method.name}(): ${method.returnType}`
+                    )}
                   </div>
                 ))}
                 {cls.methods.length === 0 && (
@@ -570,9 +599,16 @@ const UMLBlueprintDrafter = () => {
 
       <div className="uml-export">
         <h4>UML Text Representation:</h4>
-        <pre>
-          <code>{exportUML()}</code>
-        </pre>
+        <button 
+          className="export-button"
+          onClick={() => {
+            const umlText = exportUML()
+            navigator.clipboard.writeText(umlText)
+            alert('UML text copied to clipboard!')
+          }}
+        >
+          Copy UML to Clipboard
+        </button>
       </div>
 
       <div className="uml-legend">

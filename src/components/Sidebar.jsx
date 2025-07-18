@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { ChevronLeft, ChevronDown, ChevronRight, BookOpen } from 'lucide-react'
+import { ChevronLeft, ChevronDown, ChevronRight, BookOpen, CheckCircle, Circle } from 'lucide-react'
 import { extractSubsections } from '../utils/extractSubsections'
+import { useProgress } from '../hooks/useProgress'
 
 const Sidebar = ({ sections, activeSection, onToggle, isOpen }) => {
   const [expandedSections, setExpandedSections] = useState(new Set());
   const [sectionSubsections, setSectionSubsections] = useState({});
+  const { getChapterProgress } = useProgress();
   // Extract subsections for each chapter on mount
   useEffect(() => {
     const subsections = {};
@@ -63,6 +65,8 @@ const Sidebar = ({ sections, activeSection, onToggle, isOpen }) => {
           {sections.map((section) => {
             const hasSubsections = sectionSubsections[section.id]?.length > 0;
             const isExpanded = expandedSections.has(section.id);
+            const progress = getChapterProgress(section.id);
+            const isCompleted = progress.percentageRead >= 80;
             
             return (
               <li key={section.id} className="nav-item">
@@ -76,7 +80,16 @@ const Sidebar = ({ sections, activeSection, onToggle, isOpen }) => {
                     }}
                   >
                     <span className="status-icon">
-                      <BookOpen size={16} />
+                      {isCompleted ? (
+                        <CheckCircle size={16} className="text-green-600" />
+                      ) : progress.percentageRead > 0 ? (
+                        <Circle size={16} className="text-yellow-600" style={{ 
+                          background: `conic-gradient(#fbbf24 ${progress.percentageRead}%, #e5e7eb ${progress.percentageRead}%)`,
+                          borderRadius: '50%'
+                        }} />
+                      ) : (
+                        <Circle size={16} className="text-gray-400" />
+                      )}
                     </span>
                     <span className="link-text">{section.navTitle}</span>
                   </a>

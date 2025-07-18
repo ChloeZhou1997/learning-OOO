@@ -1,6 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './InheritanceTreeBuilder.css';
 
+/**
+ * InheritanceTreeBuilder Interactive Component
+ * 
+ * Visualizes inheritance hierarchies from popular frameworks to demonstrate
+ * how real-world software uses inheritance for code organization and reuse.
+ * 
+ * @component
+ * @example
+ * return (
+ *   <InheritanceTreeBuilder />
+ * )
+ * 
+ * Educational concepts covered:
+ * - Class inheritance and hierarchy
+ * - Abstract classes and interfaces
+ * - Method and property inheritance
+ * - Framework design patterns
+ * - Real-world examples from PyTorch, React, Spring, and TensorFlow
+ */
 const InheritanceTreeBuilder = () => {
   const [selectedExample, setSelectedExample] = useState('pytorch');
   const [showProperties, setShowProperties] = useState(true);
@@ -247,6 +266,14 @@ const InheritanceTreeBuilder = () => {
     }
   };
 
+  /**
+   * Recursively renders a node and its children in the inheritance tree
+   * @param {Object} node - The current node to render
+   * @param {number} level - Current depth in the tree (for indentation)
+   * @param {string[]} parentProperties - Properties inherited from parent classes
+   * @param {string[]} parentMethods - Methods inherited from parent classes
+   * @returns {JSX.Element} The rendered node component
+   */
   const renderNode = (node, level = 0, parentProperties = [], parentMethods = []) => {
     const allProperties = [...parentProperties, ...node.properties];
     const allMethods = [...parentMethods, ...node.methods];
@@ -319,7 +346,10 @@ const InheritanceTreeBuilder = () => {
 
   const currentExample = examples[selectedExample];
 
-  // Auto-scale tree to fit container
+  /**
+   * Auto-scales the inheritance tree to fit within its container
+   * Calculates appropriate scale factor based on content and container dimensions
+   */
   useEffect(() => {
     const calculateScale = () => {
       if (!treeContainerRef.current || !treeContentRef.current) return;

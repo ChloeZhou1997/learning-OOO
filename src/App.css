@@ -99,7 +99,21 @@
 }
 
 .status-icon {
-  display: none; /* Hide icons for minimal look */
+  display: flex;
+  align-items: center;
+  margin-right: 0.5rem;
+}
+
+.status-icon .text-green-600 {
+  color: #16a34a;
+}
+
+.status-icon .text-yellow-600 {
+  color: #ca8a04;
+}
+
+.status-icon .text-gray-400 {
+  color: #9ca3af;
 }
 
 .expand-toggle {
@@ -411,6 +425,17 @@
   margin-bottom: 2rem;
 }
 
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.section-header h2 {
+  margin: 0;
+}
+
 .chapter-section h2 {
   font-family: 'Inter', sans-serif;
   color: #0A192F;
@@ -630,6 +655,44 @@ pre code {
   cursor: not-allowed;
 }
 
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.quiz-stats {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.stat-item {
+  padding: 0.25rem 0.75rem;
+  background-color: #f3f4f6;
+  border-radius: 0.25rem;
+}
+
+.quiz-retry-btn {
+  background-color: #7c3aed;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+}
+
+.quiz-retry-btn:hover {
+  background-color: #6d28d9;
+}
+
 .feedback {
   margin-top: 0.5rem;
   padding: 0.75rem;
@@ -637,13 +700,41 @@ pre code {
 }
 
 .feedback-correct {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
   color: #15803d;
-  font-weight: 700;
 }
 
 .feedback-incorrect {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
   color: #b91c1c;
-  font-weight: 700;
+}
+
+.feedback-message {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.user-answer {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+  font-style: italic;
+}
+
+.feedback-explanation {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.feedback-explanation strong {
+  color: #1f2937;
+  display: block;
+  margin-bottom: 0.25rem;
 }
 
 .model-answer {
@@ -893,6 +984,12 @@ pre code {
   .interactive-container {
     width: 100%;
     margin: 1.5rem 0;
+  }
+  
+  .quiz-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
   }
 }
 
